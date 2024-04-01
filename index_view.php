@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Modern, flexible and responsive Bootstrap 5 admin &amp; dashboard template">
     <meta name="author" content="Bootlab">
-    <link href="css/modern.css" rel="stylesheet">
+    <link href="/css/modern.css" rel="stylesheet">
     <link rel="stylesheet" href="package/dist/Sweetalert2.css">
     <script src="package/dist/Sweetalert2.min.js"></script>
 
@@ -117,7 +117,7 @@
 
                     <li class="sidebar-header">
                         Elements
-                    </li>   
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -346,10 +346,11 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
-<?php //$mysqli = include_once "conexion.php";
-//$resultado = $mysqli->query("SELECT COUNT(id_user) AS num_users FROM usuarios");
-//$num_usuarios = $resultado->fetch_all(MYSQLI_ASSOC);?>                                               
-                                                        <div class="col mt-0">
+                                                    <?php
+                                                    $mysqli = include_once "conexion.php";
+                                                    $resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
+                                                    $num_usuarios = $resultado->fetch_column(0); ?>
+                                                    <div class="col mt-0">
                                                         <h5 class="card-title">Active Users</h5>
                                                     </div>
                                                     <div class="col-auto">
@@ -359,10 +360,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>                                               
-                                                    <h1 class="display-5 mt-1 mb-3">
-                                                        <?php echo $num_usuarios["num_users"]?>
-                                                    </h1>                                               
+                                                </div>
+                                                <h1 class="display-5 mt-1 mb-3">
+                                                    
+                                                    <?php echo $num_usuarios;
+                                                    ?>
+                                                </h1>
                                                 <h1 class="display-5 mt-1 mb-3">17.212</h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
@@ -445,9 +448,9 @@
                                         </div>
                                     </div>
                                     <?php
-$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-$i = $resultado->fetch_all(MYSQLI_ASSOC);
+                                    
+                                    $resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
+                                    $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     ?>
                                     <h5 class="card-title mb-0">Users</h5>
                                 </div>
@@ -463,25 +466,25 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     </thead>
                                     <tbody>
                                         <?php
-                                        foreach($i as $data){ ?>                                                                         
-                                        <tr>
-                                            <td class="d-none d-xl-table-cell">
-                                                 <?php echo $data["name"]?>                                                
-                                            </td>
-                                            <td class="d-none d-xl-table-cell">
-                                                <?php echo $data["username"]?>
-                                            </td>
-                                            <td class="d-none d-xl-table-cell">
-                                                <?php echo $data["dui"]?>
-                                            </td>
-                                            <td><span class="badge bg-success">
-                                                <?php echo $data["address"]?>
-                                            </span></td>                                            
-                                            <td class="d-none d-md-table-cell">
-                                                <?php echo $data["email"]?>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
+                                        foreach ($i as $data) { ?>
+                                            <tr>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo $data["name"] ?>
+                                                </td>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo $data["username"] ?>
+                                                </td>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo $data["dui"] ?>
+                                                </td>
+                                                <td><span class="badge bg-success">
+                                                        <?php echo $data["address"] ?>
+                                                    </span></td>
+                                                <td class="d-none d-md-table-cell">
+                                                    <?php echo $data["email"] ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
