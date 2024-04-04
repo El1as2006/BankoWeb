@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from spark.bootlab.io/dashboard-default by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
-<!-- Added by HTTrack -->
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
     <meta charset="utf-8">
@@ -15,15 +13,6 @@
     <script src="package/dist/Sweetalert2.min.js"></script>
 
     <title>Administrator Dashboard</title>
-
-    <!-- PICK ONE OF THE STYLES BELOW -->
-    <!-- <link href="css/modern.css" rel="stylesheet"> -->
-    <!-- <link href="css/classic.css" rel="stylesheet"> -->
-    <!-- <link href="css/dark.css" rel="stylesheet"> -->
-    <!-- <link href="css/light.css" rel="stylesheet"> -->
-
-    <!-- BEGIN SETTINGS -->
-    <!-- You can remove this after picking a style -->
     <style>
         body {
             opacity: 0;
@@ -56,15 +45,23 @@
                 <svg>
                     <use xlink:href="#ion-ios-pulse-strong"></use>
                 </svg>
-                Spark
+                Banko
             </a>
+            <?php
+$mysqli = include_once "conexion.php";
+$resultado = $mysqli->query("SELECT username FROM usuarios");
+$nom_usuario = $resultado->fetch_column(0); 
+			?>           
             <div class="sidebar-content">
                 <div class="sidebar-user">
                     <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
-                    <div class="fw-bold">Linda Miller</div>
+                    <div class="fw-bold">
+                        <?php 
+                        echo $nom_usuario 
+                        ?>                        
+                    </div>              
                     <small>Front-end Developer</small>
                 </div>
-
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">
                         Main
@@ -83,40 +80,6 @@
                         <a class='sidebar-link' href='addingcards.php'>
                             <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle">Add Debit/Credit Card</span>
                         </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#pages" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-file"></i> <span class="align-middle">Pages</span>
-                        </a>
-                        <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-settings.html'>Settings</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-clients.html'>Clients <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-invoice.html'>Invoice</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-pricing.html'>Pricing</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-tasks.html'>Tasks</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-chat.html'>Chat <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-blank.html'>Blank Page</a></li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#auth" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-sign-in-alt"></i> <span class="align-middle">Auth</span>
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-in.html'>Sign
-                                    In</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-up.html'>Sign
-                                    Up</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-reset-password.html'>Reset Password</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-404.html'>404
-                                    Page</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-500.html'>500
-                                    Page</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Elements
                     </li>
                 </ul>
             </div>
@@ -346,10 +309,10 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <?php
-                                                    $mysqli = include_once "conexion.php";
-                                                    $resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
-                                                    $num_usuarios = $resultado->fetch_column(0); ?>
+<?php
+$mysqli = include_once "conexion.php";
+$resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
+$num_usuarios = $resultado->fetch_column(0); ?>
                                                     <div class="col mt-0">
                                                         <h5 class="card-title">Active Users</h5>
                                                     </div>
@@ -361,12 +324,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3">
-                                                    
-                                                    <?php echo $num_usuarios;
+                                                <h1 class="display-5 mt-1 mb-3">                                                 
+                                                    <?php 
+                                                    echo $num_usuarios;
                                                     ?>
                                                 </h1>
-                                                <h1 class="display-5 mt-1 mb-3">17.212</h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
                                                     More visitors than usual
@@ -448,10 +410,10 @@
                                         </div>
                                     </div>
                                     <?php
-                                    
-                                    $resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-                                    $i = $resultado->fetch_all(MYSQLI_ASSOC);
-                                    ?>
+$mysqli = include_once "conexion.php";
+$resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
+$i = $resultado->fetch_all(MYSQLI_ASSOC);
+ ?>
                                     <h5 class="card-title mb-0">Users</h5>
                                 </div>
                                 <table id="datatables-dashboard-projects" class="table table-striped my-0">
@@ -542,7 +504,7 @@
                         </div>
                         <div class="col-4 text-end">
                             <p class="mb-0">
-                                &copy; 2024 PTC - <a class='text-muted' href='dashboard-default.html'>Banko</a>
+                                &copy; 2024 PTC - <a class='text-muted' href='index_view.php'>Banko</a>
                             </p>
                         </div>
                     </div>
