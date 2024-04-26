@@ -1,3 +1,5 @@
 <?php
 
-$lang = [];
+$lang = [
+    "Welcome Back"=>"Welcome Back",
+];

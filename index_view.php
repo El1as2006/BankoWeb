@@ -50,9 +50,9 @@ require 'index_lang.php';
 </head>
 
 <body>
-    <div class="splash active">
+    <!-- <div class="splash active">
         <div class="splash-icon"></div>
-    </div>
+    </div> -->
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
@@ -64,12 +64,12 @@ require 'index_lang.php';
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
-                    <?php 
-$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT username FROM usuarios");
-$nom_usuario = $resultado->fetch_column(0); ?>
+                    <?php
+                    $mysqli = include_once "conexion.php";
+                    $resultado = $mysqli->query("SELECT username FROM usuarios");
+                    $nom_usuario = $resultado->fetch_column(0); ?>
                     <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
-					<div class="fw-bold"><?php echo"$nom_usuario";?></div>
+                    <div class="fw-bold"><?php echo "$nom_usuario"; ?></div>
                     <small>Front-end Developer</small>
                 </div>
 
@@ -209,7 +209,7 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="index_view.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>                    
+                                <a class="dropdown-item" href="index_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown ms-lg-2">
@@ -295,7 +295,7 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                 <div class="container-fluid">
 
                     <div class="header">
-                        <h1 class="header-title"><?= lang("Welcome Back")?></h1>
+                        <h1 class="header-title"><?= lang("Welcome Back") ?></h1>
                         <p class="header-subtitle"></p>
                     </div>
 
@@ -323,54 +323,53 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                                 </div>
                                 <div class="card-body py-3">
                                     <div class="chart chart-sm">
-                                    <?php
-
- 
-//$mysqli = include_once "conexion.php";
-$result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
-$datalist = $result->fetch_all(MYSQLI_ASSOC);
-$test = array();
-
-$dataPoints = array();
-$i = 0;
-foreach($datalist as $tr)
-{
-	$count = $tr["count"];
-	$date = $tr["date"];
-	$test = array("y" => $count,"label"=>$date);
-	array_push($dataPoints,$test);
-}
-
-?>
-<script>
-window.onload = function() {
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	title:{
-		text: "Transactions"
-	},
-	axisY: {
-		title: "Number of transactions",
-		includeZero: true,
-		
-	},
-	data: [{
-		type: "bar",
-		
-		indexLabel: "{y}",
-		indexLabelPlacement: "inside",
-		indexLabelFontWeight: "bolder",
-		indexLabelFontColor: "white",
-		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-	}]
-});
-chart.render();
-}
-</script>
+                                        <?php
 
 
-                                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-                                    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+                                        //$mysqli = include_once "conexion.php";
+                                        $result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
+                                        $datalist = $result->fetch_all(MYSQLI_ASSOC);
+                                        $test = array();
+
+                                        $dataPoints = array();
+                                        $i = 0;
+                                        foreach ($datalist as $tr) {
+                                            $count = $tr["count"];
+                                            $date = $tr["date"];
+                                            $test = array("y" => $count, "label" => $date);
+                                            array_push($dataPoints, $test);
+                                        }
+
+                                        ?>
+                                        <script>
+                                            window.onload = function() {
+                                                var chart = new CanvasJS.Chart("chartContainer", {
+                                                    animationEnabled: true,
+                                                    title: {
+                                                        text: "Transactions"
+                                                    },
+                                                    axisY: {
+                                                        title: "Number of transactions",
+                                                        includeZero: true,
+
+                                                    },
+                                                    data: [{
+                                                        type: "bar",
+
+                                                        indexLabel: "{y}",
+                                                        indexLabelPlacement: "inside",
+                                                        indexLabelFontWeight: "bolder",
+                                                        indexLabelFontColor: "white",
+                                                        dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                                                    }]
+                                                });
+                                                chart.render();
+                                            }
+                                        </script>
+
+
+                                        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                        <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 
                                     </div>
                                 </div>
@@ -385,10 +384,10 @@ chart.render();
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                    <?php
-//$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT COUNT(card_number) FROM usuarios");
-$num_cards = $resultado->fetch_column(0); ?>
+                                                        <?php
+                                                        //$mysqli = include_once "conexion.php";
+                                                        $resultado = $mysqli->query("SELECT COUNT(card_number) FROM usuarios");
+                                                        $num_cards = $resultado->fetch_column(0); ?>
                                                         <h5 class="card-title">Active Cards</h5>
                                                     </div>
 
@@ -400,7 +399,7 @@ $num_cards = $resultado->fetch_column(0); ?>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3"><?php echo "$num_cards"?></h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo "$num_cards" ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
                                                     Less sales than usual
@@ -411,9 +410,9 @@ $num_cards = $resultado->fetch_column(0); ?>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <?php
-//$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
-$num_usuarios = $resultado->fetch_column(0); ?>
+                                                    //$mysqli = include_once "conexion.php";
+                                                    $resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
+                                                    $num_usuarios = $resultado->fetch_column(0); ?>
                                                     <div class="col mt-0">
                                                         <h5 class="card-title">Active Users</h5>
                                                     </div>
@@ -425,7 +424,7 @@ $num_usuarios = $resultado->fetch_column(0); ?>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_usuarios;?>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_usuarios; ?>
                                                 </h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
@@ -439,10 +438,10 @@ $num_usuarios = $resultado->fetch_column(0); ?>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                    <?php
-//$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT COUNT(id_transaction) FROM transactions");
-$num_transacciones = $resultado->fetch_column(0); ?>
+                                                        <?php
+                                                        //$mysqli = include_once "conexion.php";
+                                                        $resultado = $mysqli->query("SELECT COUNT(id_transaction) FROM transactions");
+                                                        $num_transacciones = $resultado->fetch_column(0); ?>
                                                         <h5 class="card-title">Total Transactions</h5>
                                                     </div>
 
@@ -454,7 +453,7 @@ $num_transacciones = $resultado->fetch_column(0); ?>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_transacciones;?></h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_transacciones; ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
                                                     More earnings than usual
@@ -465,10 +464,10 @@ $num_transacciones = $resultado->fetch_column(0); ?>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                    <?php
-//$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT id_account, SUM(amount) AS total_dinero FROM b_accounts GROUP BY id_account;");
-$total_cash = $resultado->fetch_column(0); ?>
+                                                        <?php
+                                                        //$mysqli = include_once "conexion.php";
+                                                        $resultado = $mysqli->query("SELECT id_account, SUM(amount) AS total_dinero FROM b_accounts GROUP BY id_account;");
+                                                        $total_cash = $resultado->fetch_column(0); ?>
                                                         <h5 class="card-title">Cash Consolidation</h5>
                                                     </div>
 
@@ -480,7 +479,7 @@ $total_cash = $resultado->fetch_column(0); ?>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3"><?php echo $total_cash;?></h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $total_cash; ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -4.25% </span>
                                                     Less orders than usual
@@ -516,7 +515,7 @@ $total_cash = $resultado->fetch_column(0); ?>
                                         </div>
                                     </div>
                                     <?php
-                                    
+
                                     $resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
                                     $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     ?>
