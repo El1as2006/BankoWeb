@@ -1,3 +1,7 @@
+<?php
+require 'index_lang.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- Mirrored from spark.bootlab.io/dashboard-default by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
@@ -10,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Modern, flexible and responsive Bootstrap 5 admin &amp; dashboard template">
     <meta name="author" content="Bootlab">
-    <link href=".../css/modern.css" rel="stylesheet">
+    <link href="/css/modern.css" rel="stylesheet">
     <link rel="stylesheet" href="package/dist/Sweetalert2.css">
     <script src="package/dist/Sweetalert2.min.js"></script>
 
@@ -136,9 +140,7 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
-                                <i class="align-middle fas fa-envelope-open"></i>
-                            </a>
+
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
                                 <div class="dropdown-menu-header">
                                     <div class="position-relative">
@@ -198,6 +200,16 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                                 <div class="dropdown-menu-footer">
                                     <a href="#" class="text-muted">Show all messages</a>
                                 </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown ms-lg-2">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                <i class="align-middle fas fa-language"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="index_view.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="index_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>                    
                             </div>
                         </li>
                         <li class="nav-item dropdown ms-lg-2">
@@ -283,9 +295,7 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                 <div class="container-fluid">
 
                     <div class="header">
-                        <h1 class="header-title">
-                            Welcome back!
-                        </h1>
+                        <h1 class="header-title"><?= lang("Welcome Back")?></h1>
                         <p class="header-subtitle"></p>
                     </div>
 
@@ -313,7 +323,55 @@ $nom_usuario = $resultado->fetch_column(0); ?>
                                 </div>
                                 <div class="card-body py-3">
                                     <div class="chart chart-sm">
-                                        <canvas id="chartjs-dashboard-line"></canvas>
+                                    <?php
+
+ 
+//$mysqli = include_once "conexion.php";
+$result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
+$datalist = $result->fetch_all(MYSQLI_ASSOC);
+$test = array();
+
+$dataPoints = array();
+$i = 0;
+foreach($datalist as $tr)
+{
+	$count = $tr["count"];
+	$date = $tr["date"];
+	$test = array("y" => $count,"label"=>$date);
+	array_push($dataPoints,$test);
+}
+
+?>
+<script>
+window.onload = function() {
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "Transactions"
+	},
+	axisY: {
+		title: "Number of transactions",
+		includeZero: true,
+		
+	},
+	data: [{
+		type: "bar",
+		
+		indexLabel: "{y}",
+		indexLabelPlacement: "inside",
+		indexLabelFontWeight: "bolder",
+		indexLabelFontColor: "white",
+		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+chart.render();
+}
+</script>
+
+
+                                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+
                                     </div>
                                 </div>
                             </div>
