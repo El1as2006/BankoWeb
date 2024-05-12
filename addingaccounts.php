@@ -1,3 +1,6 @@
+<?php
+require 'addingaccounts_lang.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,11 +48,8 @@
 
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
-			<a class='sidebar-brand' href='index.html'>
-				<svg>
-					<use xlink:href="#ion-ios-pulse-strong"></use>
-				</svg>
-				Banko
+			<a class='sidebar-brand' href='index_view.php'>
+				<img src="img/brands/LogoBanko1.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
             <?php 
@@ -65,50 +65,21 @@ $nom_usuario = $resultado->fetch_column(0);?>
                     <li class="sidebar-header">
                         Main
                     </li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='index_view.php'>
+                            <i class="align-middle me-2 far fa-fw fa-home"></i> <span class="align-middle"><?= lang("Principal Index") ?></span>
+                        </a>
+                    </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='createuser_view.php'>
-                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle">Create New User</span>
+                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create New User") ?></span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='addingcards.php'>
-                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle">Add Debit/Credit Card</span>
+                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
                         </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#pages" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-file"></i> <span class="align-middle">Pages</span>
-                        </a>
-                        <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-settings.html'>Settings</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-clients.html'>Clients <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-invoice.html'>Invoice</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-pricing.html'>Pricing</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-tasks.html'>Tasks</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-chat.html'>Chat <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-blank.html'>Blank Page</a></li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#auth" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-sign-in-alt"></i> <span class="align-middle">Auth</span>
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-in.html'>Sign
-                                    In</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-up.html'>Sign
-                                    Up</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-reset-password.html'>Reset Password</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-404.html'>404
-                                    Page</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-500.html'>500
-                                    Page</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Elements
                     </li>
                 </ul>
 
@@ -128,71 +99,17 @@ $nom_usuario = $resultado->fetch_column(0);?>
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav ms-auto">
-						<li class="nav-item dropdown active">
-							<a class="nav-link dropdown-toggle position-relative" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
-								<i class="align-middle fas fa-envelope-open"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
-								<div class="dropdown-menu-header">
-									<div class="position-relative">
-										4 New Messages
-									</div>
-								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-5.jpg" class="avatar img-fluid rounded-circle" alt="Michelle Bilodeau">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Michelle Bilodeau</div>
-												<div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu tortor.</div>
-												<div class="text-muted small mt-1">5m ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-3.jpg" class="avatar img-fluid rounded-circle" alt="Kathie Burton">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Kathie Burton</div>
-												<div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
-												<div class="text-muted small mt-1">30m ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-2.jpg" class="avatar img-fluid rounded-circle" alt="Alexander Groves">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Alexander Groves</div>
-												<div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.</div>
-												<div class="text-muted small mt-1">2h ago</div>
-											</div>
-										</div>
-									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<img src="img/avatars/avatar-4.jpg" class="avatar img-fluid rounded-circle" alt="Daisy Seger">
-											</div>
-											<div class="col-10 ps-2">
-												<div class="text-dark">Daisy Seger</div>
-												<div class="text-muted small mt-1">Aenean tellus metus, bibendum sed, posuere ac, mattis non.</div>
-												<div class="text-muted small mt-1">5h ago</div>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all messages</a>
-								</div>
-							</div>
-						</li>
+					<li class="nav-item dropdown ms-lg-2">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                <i class="align-middle fas fa-language"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="addingaccounts.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="addingaccounts.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
+                            </div>
+                        </li>
+
 						<li class="nav-item dropdown ms-lg-2">
 							<a class="nav-link dropdown-toggle position-relative" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<i class="align-middle fas fa-bell"></i>
@@ -261,12 +178,12 @@ $nom_usuario = $resultado->fetch_column(0);?>
 								<i class="align-middle fas fa-cog"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-user"></i> View Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Contacts</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-chart-pie"></i> Analytics</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-cogs"></i> Settings</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#L"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign out</a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-user"></i> <?= lang("View Profile") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-comments"></i> <?= lang("Contacts") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-chart-pie"></i> <?= lang("Analytics") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-cogs"></i><?= lang("Settings") ?></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
 							</div>
 						</li>
 					</ul>
@@ -277,7 +194,7 @@ $nom_usuario = $resultado->fetch_column(0);?>
 
 					<div class="header">
 						<h1 class="header-title">
-							Adding Bank Accounts
+						<?= lang("Adding Bank Accounts") ?>
 						</h1>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
@@ -288,7 +205,7 @@ $nom_usuario = $resultado->fetch_column(0);?>
 					<div class="col-12">
 							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title">Always responsive</h5>
+									<h5 class="card-title"><?= lang("Always responsive") ?></h5>
 									<h6 class="card-subtitle text-muted"> </h6>
 								</div>
 								<div class="table-responsive">
@@ -300,11 +217,11 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     ?>
 									<thead>
 										<tr>
-											<th style="width:25%;">Name</th>
-											<th style="width:25%">Username</th>
+											<th style="width:25%;"><?= lang("Name") ?></th>
+											<th style="width:25%"><?= lang("Username") ?></th>
 											<th style="width:25%">Dui</th>
 											<th class="d-none d-md-table-cell" style="width:25%">Email</th>
-											<th>Actions</th>
+											<th><?= lang("Actions") ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -324,17 +241,15 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                                     <?php echo $data["email"] ?>
                                                 </td>
 												<td class="table-action">
-												<a href="#"><i class="align-middle fas fa-fw fa-pen"></i></i></a>
-												<a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>
+												<a href="generateaccount.php" class="btn btn-outline-primary"><?= Lang("View Acccount")?></a>	
 											</td>
                                             </tr>
-                                        <?php } ?>									
+                                        <?php } ?>				
 									</tbody>
 								</table>
 								</div>
 							</div>
 						</div>
-
 				</div>
 			</main>
 			<footer class="footer">

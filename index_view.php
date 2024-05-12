@@ -1,3 +1,7 @@
+<?php
+require 'index_lang.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- Mirrored from spark.bootlab.io/dashboard-default by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
@@ -46,23 +50,24 @@
 </head>
 
 <body>
-    <div class="splash active">
+    <!-- <div class="splash active">
         <div class="splash-icon"></div>
-    </div>
+    </div> -->
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
-            <a class='sidebar-brand' href='index.html'>
-                <svg>
-                    <use xlink:href="#ion-ios-pulse-strong"></use>
-                </svg>
-                Spark
+            <a class='sidebar-brand' href='index_view.php'>
+                <img src="img/brands/LogoBanko1.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
+                    <?php
+                    $mysqli = include_once "conexion.php";
+                    $resultado = $mysqli->query("SELECT username FROM usuarios");
+                    $nom_usuario = $resultado->fetch_column(0); ?>
                     <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
-                    <div class="fw-bold">Linda Miller</div>
-                    <small>Front-end Developer</small>
+                    <div class="fw-bold"><?php echo "$nom_usuario"; ?></div>
+                    <small>Administrator</small>
                 </div>
 
                 <ul class="sidebar-nav">
@@ -71,52 +76,28 @@
                     </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='createuser_view.php'>
-                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle">Create New User</span>
+                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create New User") ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='addingaccounts.php'>
+                            <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle"><?= lang("Add Bank Account") ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='addingcards.php'>
-                            <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle">Add Bank Account</span>
+                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class='sidebar-link' href='addingcards.php'>
-                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle">Add Debit/Credit Card</span>
+                        <a class='sidebar-link' href='listingtransferences_view.php'>
+                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Listing Transferences") ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a data-bs-target="#pages" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-file"></i> <span class="align-middle">Pages</span>
+                        <a class='sidebar-link' href=''>
+                            <i class="align-middle me-2 far fa-fw fa-users"></i> <span class="align-middle"><?= lang("Record of password changes") ?></span>
                         </a>
-                        <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-settings.html'>Settings</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-clients.html'>Clients <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-invoice.html'>Invoice</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-pricing.html'>Pricing</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-tasks.html'>Tasks</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-chat.html'>Chat <span class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-blank.html'>Blank Page</a></li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#auth" data-bs-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="align-middle me-2 fas fa-fw fa-sign-in-alt"></i> <span class="align-middle">Auth</span>
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-in.html'>Sign
-                                    In</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-sign-up.html'>Sign
-                                    Up</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-reset-password.html'>Reset Password</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-404.html'>404
-                                    Page</a></li>
-                            <li class="sidebar-item"><a class='sidebar-link' href='pages-500.html'>500
-                                    Page</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="sidebar-header">
-                        Elements
                     </li>
                 </ul>
             </div>
@@ -127,16 +108,10 @@
                     <i class="hamburger align-self-center"></i>
                 </a>
 
-                <form class="d-none d-sm-inline-block">
-                    <input class="form-control form-control-lite" type="text" placeholder="Search projects...">
-                </form>
-
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
-                                <i class="align-middle fas fa-envelope-open"></i>
-                            </a>
+
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
                                 <div class="dropdown-menu-header">
                                     <div class="position-relative">
@@ -199,13 +174,23 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown ms-lg-2">
+                            <a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                <i class="align-middle fas fa-language"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="index_view.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="index_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown ms-lg-2">
                             <a class="nav-link dropdown-toggle position-relative" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
                                 <i class="align-middle fas fa-bell"></i>
                                 <span class="indicator"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
                                 <div class="dropdown-menu-header">
-                                    4 New Notifications
+                                <?= lang("Notifications") ?>
                                 </div>
                                 <div class="list-group">
                                     <a href="#" class="list-group-item">
@@ -257,7 +242,7 @@
                                     </a>
                                 </div>
                                 <div class="dropdown-menu-footer">
-                                    <a href="#" class="text-muted">Show all notifications</a>
+                                    <a href="#" class="text-muted"><?= lang("Show all notifications") ?></a>
                                 </div>
                             </div>
                         </li>
@@ -266,12 +251,22 @@
                                 <i class="align-middle fas fa-cog"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-user"></i> View Profile</a>
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Contacts</a>
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-chart-pie"></i> Analytics</a>
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-cogs"></i> Settings</a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-user"></i> <?= lang("View Profile") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-comments"></i> <?= lang("Contacts") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-chart-pie"></i> <?= lang("Analytics") ?></a>
+                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-cogs"></i><?= lang("Settings") ?></a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign out</a>
+                                <a class="dropdown-item" type="submit" name="submit" id="submit"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
+                                <?php
+if(isset($_POST['submit'])){
+echo "<p><script>swal.fire({
+title: 'Sign Out',
+text: 'Loging Out',
+icon: 'warning',
+button: 'Cerrar',
+});</script></p>";
+}
+?>
                             </div>
                         </li>
                     </ul>
@@ -281,9 +276,7 @@
                 <div class="container-fluid">
 
                     <div class="header">
-                        <h1 class="header-title">
-                            Welcome back!
-                        </h1>
+                        <h1 class="header-title"><?= lang("Welcome Back") ?></h1>
                         <p class="header-subtitle"></p>
                     </div>
 
@@ -296,22 +289,60 @@
                                             <i class="align-middle" data-feather="refresh-cw"></i>
                                         </a>
                                         <div class="d-inline-block dropdown show">
-                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <i class="align-middle" data-feather="more-vertical"></i>
-                                            </a>
-
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
                                         </div>
                                     </div>
-                                    <h5 class="card-title mb-0">Recent Movement</h5>
+                                    <h5 class="card-title mb-0"><?= lang("Recent Movements") ?></h5>
                                 </div>
                                 <div class="card-body py-3">
                                     <div class="chart chart-sm">
-                                        <canvas id="chartjs-dashboard-line"></canvas>
+                                        <?php
+
+
+                                        //$mysqli = include_once "conexion.php";
+                                        $result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
+                                        $datalist = $result->fetch_all(MYSQLI_ASSOC);
+                                        $test = array();
+
+                                        $dataPoints = array();
+                                        $i = 0;
+                                        foreach ($datalist as $tr) {
+                                            $count = $tr["count"];
+                                            $date = $tr["date"];
+                                            $test = array("y" => $count, "label" => $date);
+                                            array_push($dataPoints, $test);
+                                        }
+
+                                        ?>
+                                        <script>
+                                            window.onload = function() {
+                                                var chart = new CanvasJS.Chart("chartContainer", {
+                                                    animationEnabled: true,
+                                                    title: {
+                                                        text: "<?=lang ("Transactions")?>"
+                                                    },
+                                                    axisY: {
+                                                        title: "<?=lang ("Number of transactions")?>",
+                                                        includeZero: true,
+
+                                                    },
+                                                    data: [{
+                                                        type: "bar",
+
+                                                        indexLabel: "{y}",
+                                                        indexLabelPlacement: "inside",
+                                                        indexLabelFontWeight: "bolder",
+                                                        indexLabelFontColor: "white",
+                                                        dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                                                    }]
+                                                });
+                                                chart.render();
+                                            }
+                                        </script>
+
+
+                                        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                        <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+
                                     </div>
                                 </div>
                             </div>
@@ -325,21 +356,23 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Sales Today</h5>
+                                                        <?php
+                                                        $resultado = $mysqli->query("SELECT COUNT(card_number) FROM usuarios");
+                                                        $num_cards = $resultado->fetch_column(0); ?>
+                                                        <h5 class="card-title"><?= lang("Active Cards") ?></h5>
                                                     </div>
 
                                                     <div class="col-auto">
                                                         <div class="avatar">
                                                             <div class="avatar-title rounded-circle bg-primary-dark">
-                                                                <i class="align-middle" data-feather="truck"></i>
+                                                                <i class="align-middle" data-feather="credit-card"></i>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3">2.562</h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo "$num_cards" ?></h1>
                                                 <div class="mb-0">
-                                                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
-                                                    Less sales than usual
+                                                    <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span><?= lang("Less sales than usual") ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -347,11 +380,10 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <?php
-                                                    $mysqli = include_once "conexion.php";
                                                     $resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
                                                     $num_usuarios = $resultado->fetch_column(0); ?>
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Active Users</h5>
+                                                        <h5 class="card-title"><?= lang("Active Users") ?></h5>
                                                     </div>
                                                     <div class="col-auto">
                                                         <div class="avatar">
@@ -361,15 +393,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3">
-                                                    
-                                                    <?php echo $num_usuarios;
-                                                    ?>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_usuarios; ?>
                                                 </h1>
-                                                <h1 class="display-5 mt-1 mb-3">17.212</h1>
                                                 <div class="mb-0">
-                                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
-                                                    More visitors than usual
+                                                    <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span><?= lang("More visitors than usual") ?>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +407,11 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Total Earnings</h5>
+                                                        <?php
+                                                        //$mysqli = include_once "conexion.php";
+                                                        $resultado = $mysqli->query("SELECT COUNT(id_transaction) FROM transactions");
+                                                        $num_transacciones = $resultado->fetch_column(0); ?>
+                                                        <h5 class="card-title"><?= lang("Total Transactions") ?></h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -390,10 +422,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3">$24.300</h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $num_transacciones; ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
-                                                    More earnings than usual
+                                                 <?= lang("More earnings than usual") ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -401,7 +433,11 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col mt-0">
-                                                        <h5 class="card-title">Pending Transactions</h5>
+                                                        <?php
+                                                        //$mysqli = include_once "conexion.php";
+                                                        $resultado = $mysqli->query("SELECT id_account, SUM(amount) AS total_dinero FROM b_accounts GROUP BY id_account;");
+                                                        $total_cash = $resultado->fetch_column(0); ?>
+                                                        <h5 class="card-title"><?= lang("Cash Consolidation") ?></h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -412,10 +448,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3">43</h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo $total_cash; ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -4.25% </span>
-                                                    Less orders than usual
+                                                    <?= lang("Less orders than usual") ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -436,32 +472,24 @@
                                             <i class="align-middle" data-feather="refresh-cw"></i>
                                         </a>
                                         <div class="d-inline-block dropdown show">
-                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <i class="align-middle" data-feather="more-vertical"></i>
-                                            </a>
-
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
                                         </div>
                                     </div>
                                     <?php
-                                    
+
                                     $resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
                                     $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     ?>
-                                    <h5 class="card-title mb-0">Users</h5>
+                                    <h5 class="card-title mb-0"><?= lang("Users") ?></h5>
                                 </div>
                                 <table id="datatables-dashboard-projects" class="table table-striped my-0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th class="d-none d-xl-table-cell">Username</th>
+                                            <th><?= lang("Name") ?></th>
+                                            <th class="d-none d-xl-table-cell"><?= lang("Username") ?></th>
                                             <th class="d-none d-xl-table-cell">Dui</th>
-                                            <th>Address</th>
+                                            <th><?= lang("Address") ?></th>
                                             <th class="d-none d-md-table-cell">Email</th>
+                                            <th class="d-none d-md-table-cell"><?= lang("Card Number")?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -483,40 +511,16 @@
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["email"] ?>
                                                 </td>
+                                                <td class="d-none d-md-table-cell">
+                                                    <?php echo $data["card_number"] ?>
+                                                </td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-4 col-xxl-3 d-flex">
-                            <div class="card flex-fill w-100">
-                                <div class="card-header">
-                                    <div class="card-actions float-end">
-                                        <a href="#" class="me-1">
-                                            <i class="align-middle" data-feather="refresh-cw"></i>
-                                        </a>
-                                        <div class="d-inline-block dropdown show">
-                                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <i class="align-middle" data-feather="more-vertical"></i>
-                                            </a>
-
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h5 class="card-title mb-0">Monthly Transactions</h5>
-                                </div>
-                                <div class="card-body d-flex w-100">
-                                    <div class="align-self-center chart chart-lg">
-                                        <canvas id="chartjs-dashboard-bar"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
 
                 </div>
@@ -525,24 +529,11 @@
                 <div class="container-fluid">
                     <div class="row text-muted">
                         <div class="col-8 text-start">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Support</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Privacy</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Terms of Service</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Contact</a>
-                                </li>
-                            </ul>
+
                         </div>
                         <div class="col-4 text-end">
                             <p class="mb-0">
-                                &copy; 2024 PTC - <a class='text-muted' href='dashboard-default.html'>Banko</a>
+                                &copy; 2024 PTC - <a class='text-muted' href='index_view.php'>Banko</a>
                             </p>
                         </div>
                     </div>

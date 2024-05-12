@@ -54,8 +54,8 @@ $conn->close();
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/login.css">
-  <link rel="stylesheet" href="package/dist/Sweetalert2.css">
-  <script src="package/dist/Sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="package/dist/sweetalert2.css">
+  <script src="package/dist/sweetalert2.min.js"></script>
   
 </head>
 <body>

@@ -1,4 +1,3 @@
-
 <?php
 
  
@@ -27,10 +26,10 @@ window.onload = function() {
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	title:{
-		text: "Revenue Chart of Acme Corporation"
+		text: "Transactions"
 	},
 	axisY: {
-		title: "Revenue (in USD)",
+		title: "Number of transactions",
 		includeZero: true,
 		
 	},
