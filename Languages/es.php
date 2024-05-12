@@ -47,7 +47,10 @@ $lang = [
     "Number of transactions"=>"Número de transacciones",
     "Card Number"=>"Número de tarjeta",
     "View Acccount"=>"Ver Cuenta",
-    "Record of password changes"=>"Historial de cambio de contraseña"
+    "Record of password changes"=>"Historial de cambio de contraseña",
+    "Id User"=>"Id Usuario",
+    "Changed by"=>"Cambiado por",
+    "Password Change Date"=>"Fecha de cambio contraseña"
 
 ];
 

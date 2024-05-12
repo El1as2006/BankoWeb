@@ -103,9 +103,9 @@ $nom_usuario = $resultado->fetch_column(0);?>
                                 <i class="align-middle fas fa-language"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="listingtransferences_view.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
+                                <a class="dropdown-item" href="passrecord_view.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="listingtransferences_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
+                                <a class="dropdown-item" href="passrecord_view.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
                             </div>
                         </li>
 
@@ -193,7 +193,7 @@ $nom_usuario = $resultado->fetch_column(0);?>
 
 					<div class="header">
 						<h1 class="header-title">
-                        <?= lang("Listing Transferences") ?>
+                        <?= lang("Record of password changes") ?>
 						</h1>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
@@ -216,11 +216,9 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                     ?>
 									<thead>
 										<tr>
-											<th style="width:20%;"><?= lang("Id Transference") ?></th>
-											<th style="width:20%"><?= lang("Amount") ?></th>
-											<th style="width:20%"><?= lang("Sent by") ?></th>
-											<th class="d-none d-md-table-cell" style="width:20%"><?= lang("Sent to") ?></th>
-											<th><?= lang("Transaction Date") ?></th>
+											<th style="width:20%;"><?= lang("Id User") ?></th>
+											<th style="width:20%"><?= lang("Changed by") ?></th>
+											<th style="width:20%"><?= lang("Password Change Date") ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -232,13 +230,7 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
                                                     <?php echo $data["amount"] ?>
-                                                </td>
-                                                <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["sent_by"] ?>
-                                                </td>
-                                                <td class="d-none d-md-table-cell">
-                                                    <?php echo $data["sent_to"] ?>
-                                                </td>
+                                                </td>                                        
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["transaction_date"] ?>
                                                 </td>

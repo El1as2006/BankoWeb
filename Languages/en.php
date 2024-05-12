@@ -47,6 +47,9 @@ $lang = [
     "Number of transactions"=>"Number of transactions",
     "Card Number"=>"Card Number",
     "View Acccount"=>"View Acccount",
-    "Record of password changes"=>"Record of password changes"
+    "Record of password changes"=>"Record of password changes",
+    "Id User"=>"Id User",
+    "Changed by"=>"Changed by",
+    "Password Change Date"=>"Password Change Date"
 
 ];
