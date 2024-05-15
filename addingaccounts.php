@@ -53,8 +53,8 @@ require 'addingaccounts_lang.php';
 			</a>
 			<div class="sidebar-content">
             <?php 
-$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT username FROM usuarios");
+$pgsql = include_once "conexion.php";
+$resultado = $pgsql->query("SELECT username FROM usuarios");
 $nom_usuario = $resultado->fetch_column(0);?>
 				<div class="sidebar-user">
 					<img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
@@ -212,8 +212,8 @@ $nom_usuario = $resultado->fetch_column(0);?>
 								<table class="table table-striped">
 
 								<?php                                    
-$resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-$i = $resultado->fetch_all(MYSQLI_ASSOC);
+$resultado = $pgsql->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
+$i = $resultado->fetch_assoc(0);
                                     ?>
 									<thead>
 										<tr>
@@ -260,7 +260,7 @@ $i = $resultado->fetch_all(MYSQLI_ASSOC);
 						</div>
 						<div class="col-4 text-end">
 							<p class="mb-0">
-								&copy; 2024 - <a class='text-muted' href='dashboard-default.html'>Banko</a>
+								&copy; 2024 - <a class='text-muted' href='index_view.php'>Banko</a>
 							</p>
 						</div>
 					</div>

@@ -53,9 +53,11 @@ require 'addingaccounts_lang.php';
 			</a>
 			<div class="sidebar-content">
             <?php 
-$mysqli = include_once "conexion.php";
-$resultado = $mysqli->query("SELECT username FROM usuarios");
-$nom_usuario = $resultado->fetch_column(0);?>
+$pgsql = include_once "conexion.php";
+$stmt = $conn->prepare("SELECT username FROM usuarios");
+$stmt->execute();
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
 				<div class="sidebar-user">
 					<img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
 					<div class="fw-bold"><?php echo"$nom_usuario";?></div>
@@ -212,8 +214,9 @@ $nom_usuario = $resultado->fetch_column(0);?>
 								<table class="table table-striped">
 
 								<?php                                    
-$resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-$i = $resultado->fetch_all(MYSQLI_ASSOC);
+$stmt = $conn->prepare("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
+$stmt->execute();
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
                                     ?>
 									<thead>
 										<tr>

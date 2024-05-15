@@ -50,66 +50,45 @@
     </div>
   </main>
   <?php
-session_start();
 
+session_start();
+ 
 $conn = include 'conexion.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-   // Evitamos posibles ataques de inyección SQL mediante la preparación de la consulta
-   $username = mysqli_real_escape_string($conn, $_POST['username']);
-   $password = mysqli_real_escape_string($conn, $_POST['password']);
-  
-   if (empty($username) || empty($password)) {
+   $stmt = $conn->prepare("SELECT * FROM usuarios WHERE username=:username");
+   $stmt->bindParam(':username', $_POST["username"], PDO::PARAM_STR);
+   $stmt->execute();
+   $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+   if (empty($result)) {
        echo "Please fill in all fields";
    } else {
 
-       // Utilizamos consultas preparadas para evitar la inyección de SQL
-       $sql = "SELECT * FROM usuarios WHERE username=?";
-       $stmt = $conn->prepare($sql);
-       $stmt->bind_param("s", $username);
-       $stmt->execute();
-       $result = $stmt->get_result();
+       if (password_verify($_POST["password"], $result['password'])) {
 
-       if ($result->num_rows == 1) {
-
-           $row = $result->fetch_assoc();
-           if (password_verify($password, $row['password'])) {
-
-               // Iniciamos la sesión y almacenamos el nombre de usuario
-               $_SESSION['username'] = $username;
-               echo "<p>
-               <script>
-               swal({
-               title: 'Succesful Login',
-               text: 'Welcome',
-               icon: 'success',
-               button: 'Close',
-               });
-               </script>
-               </p>"; 
+           // Iniciamos la sesión y almacenamos el nombre de usuario
+           $_SESSION['username'] = $result['username'];
+           echo "<p>
+           <script>
+           swal({
+           title: 'Succesful Login',
+           text: 'Welcome',
+           icon: 'success',
+           button: 'Close',
+           });
+           </script>
+           </p>"; 
             
-               header("Location: index_view.php"); 
-           } else 
-           {
-            echo "<p>
-            <script>
-            swal({
-            title: 'Wrong Password',
-            text: 'Please check your password',
-            icon: 'warning',
-            button: 'Close',
-            });
-            </script>
-            </p>"; 
-           }
+           header("Location: index_view.php"); 
        } else 
        {
         echo "<p>
         <script>
         swal({
-        title: 'Non-existemt User',
-        text: 'This user does not exist',
+        title: 'Wrong Password',
+        text: 'Please check your password',
         icon: 'warning',
         button: 'Close',
         });
@@ -122,6 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

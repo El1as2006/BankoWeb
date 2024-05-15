@@ -62,9 +62,11 @@ require 'index_lang.php';
             <div class="sidebar-content">
                 <div class="sidebar-user">
                     <?php
-                    $mysqli = include_once "conexion.php";
-                    $resultado = $mysqli->query("SELECT username FROM usuarios");
-                    $nom_usuario = $resultado->fetch_column(0); ?>
+                    $pgsql = include_once "conexion.php";                  
+                    $stmt = $conn->prepare("SELECT username FROM usuarios");
+                    $stmt->execute();
+                    $nom_usuario = $stmt->fetch(PDO::FETCH_COLUMN);   
+                    ?>
                     <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
                     <div class="fw-bold"><?php echo "$nom_usuario"; ?></div>
                     <small>Administrator</small>
@@ -233,11 +235,9 @@ button: 'Cerrar',
                                 <div class="card-body py-3">
                                     <div class="chart chart-sm">
                                         <?php
-
-
-                                        //$mysqli = include_once "conexion.php";
-                                        $result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
-                                        $datalist = $result->fetch_all(MYSQLI_ASSOC);
+                                        $stmt = $conn->prepare("SELECT transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
+                                        $stmt->execute();
+                                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
                                         $test = array();
 
                                         $dataPoints = array();
@@ -294,8 +294,11 @@ button: 'Cerrar',
                                                 <div class="row">
                                                     <div class="col mt-0">
                                                         <?php
-                                                        $resultado = $mysqli->query("SELECT COUNT(card_number) FROM usuarios");
-                                                        $num_cards = $resultado->fetch_column(0); ?>
+                                                        
+                                                        $stmt = $conn->prepare("SELECT COUNT(card_number) FROM usuarios");
+                                                        $stmt->execute();
+                                                        $num_cards = $stmt->fetch(PDO::FETCH_COLUMN);
+                                                        ?>
                                                         <h5 class="card-title"><?= lang("Active Cards") ?></h5>
                                                     </div>
 
@@ -317,8 +320,10 @@ button: 'Cerrar',
                                             <div class="card-body">
                                                 <div class="row">
                                                     <?php
-                                                    $resultado = $mysqli->query("SELECT COUNT(id_user) FROM usuarios");
-                                                    $num_usuarios = $resultado->fetch_column(0); ?>
+                                                    $stmt = $conn->prepare("SELECT COUNT(id_user) FROM usuarios");
+                                                    $stmt->execute();
+                                                    $num_usuarios = $stmt->fetch(PDO::FETCH_COLUMN);
+                                                    ?>
                                                     <div class="col mt-0">
                                                         <h5 class="card-title"><?= lang("Active Users") ?></h5>
                                                     </div>
@@ -345,9 +350,10 @@ button: 'Cerrar',
                                                 <div class="row">
                                                     <div class="col mt-0">
                                                         <?php
-                                                        //$mysqli = include_once "conexion.php";
-                                                        $resultado = $mysqli->query("SELECT COUNT(id_transaction) FROM transactions");
-                                                        $num_transacciones = $resultado->fetch_column(0); ?>
+                                                        $stmt = $conn->prepare("SELECT COUNT(id_transaction) FROM transactions");
+                                                        $stmt->execute();
+                                                        $num_transacciones = $stmt->fetch(PDO::FETCH_COLUMN);
+                                                        ?>
                                                         <h5 class="card-title"><?= lang("Total Transactions") ?></h5>
                                                     </div>
 
@@ -371,10 +377,11 @@ button: 'Cerrar',
                                                 <div class="row">
                                                     <div class="col mt-0">
                                                         <?php
-                                                        //$mysqli = include_once "conexion.php";
-                                                        $resultado = $mysqli->query("SELECT id_account, SUM(amount) AS total_dinero FROM b_accounts GROUP BY id_account;");
-                                                        $total_cash = $resultado->fetch_column(0); ?>
-                                                        <h5 class="card-title"><?= lang("Cash Consolidation") ?></h5>
+                                                         $stmt = $conn->prepare("SELECT id_account, SUM(amount) AS total_dinero FROM b_accounts GROUP BY id_account");
+                                                         $stmt->execute();
+                                                         $total_cash = $stmt->fetch(PDO::FETCH_COLUMN);                                                     
+                                                        ?>
+                                                        <h5 class="card-title"><?= lang("Cash Consolidation")?></h5>
                                                     </div>
 
                                                     <div class="col-auto">
@@ -398,8 +405,6 @@ button: 'Cerrar',
                         </div>
                     </div>
 
-
-
                     <div class="row">
                         <div class="col-12 col-lg-8 col-xxl-9 d-flex">
                             <div class="card flex-fill">
@@ -412,9 +417,9 @@ button: 'Cerrar',
                                         </div>
                                     </div>
                                     <?php
-
-                                    $resultado = $mysqli->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-                                    $i = $resultado->fetch_all(MYSQLI_ASSOC);
+                                     $stmt = $conn->prepare("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
+                                     $stmt->execute();
+                                     $i = $stmt->fetch(PDO::FETCH_ASSOC);
                                     ?>
                                     <h5 class="card-title mb-0"><?= lang("Users") ?></h5>
                                 </div>
@@ -456,10 +461,8 @@ button: 'Cerrar',
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        
+                        </div>                        
                     </div>
-
                 </div>
             </main>
             <footer class="footer">

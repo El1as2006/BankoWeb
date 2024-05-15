@@ -41,127 +41,142 @@ require 'createuser_lang.php';
 </head>
 
 <body>
-    <?php
-    $conn = include_once ("conexion.php");
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $name = mysqli_real_escape_string($conn, $_POST["name"]);
-        $lastname = mysqli_real_escape_string($conn, $_POST["lastname"]);
-        $username = mysqli_real_escape_string($conn, $_POST["username"]);
-        $password = mysqli_real_escape_string($conn, $_POST["password"]);
-        $confirmPassword = mysqli_real_escape_string($conn, $_POST["confirm_password"]);
-        $address = mysqli_real_escape_string($conn, $_POST["address"]);
-        $dui = mysqli_real_escape_string($conn, $_POST["dui"]);
-        $email = mysqli_real_escape_string($conn, $_POST["email"]);
+<?php
 
-        // $user_type = mysqli_real_escape_string($conn, $_POST["user_type"]);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if (empty($name) || empty($lastname) || empty($username) || empty($password) || empty($address) || empty($dui) || empty($email)) {
-            echo "<script>swal({
-            title: 'Invalid Name or Lastname',
-            text: 'Please enter a valid name and lastname (only letters allowed).',
-            icon: 'error',
-            button: 'Close',
-            });</script>";
-            exit;
-        }
+    $conn = include_once("conexion.php");
 
-        if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $lastname)) {
-            echo "<script>
-                swal({
-                    title: 'Invalid Name or Lastname',
-                    text: 'Please enter a valid name and lastname (only letters allowed).',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
+    $stmt = $conn->prepare("INSERT INTO usuarios (name, lastname, username, password, address, dui, email, user_type) VALUES (:name, :lastname, :username, :password, :address, :dui, :email, :user_type)");
 
-        if (!preg_match("/^[0-9-]*$/", $dui)) {
-            echo "<script>
-                swal({
-                    title: 'Invalid DUI',
-                    text: 'Please enter a valid DUI (only numbers and hyphen allowed).',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
+    $stmt->bindParam(':name', $_POST["name"], PDO::PARAM_STR);
+    $stmt->bindParam(':lastname', $_POST["lastname"], PDO::PARAM_STR);
+    $stmt->bindParam(':username', $_POST["username"], PDO::PARAM_STR);
+    $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+    $stmt->bindParam(':address', $_POST["address"], PDO::PARAM_STR);
+    $stmt->bindParam(':dui', $_POST["dui"], PDO::PARAM_STR);
+    $stmt->bindParam(':email', $_POST["email"], PDO::PARAM_STR);
+    $stmt->bindParam(':user_type', $_POST["user_type"], PDO::PARAM_INT);
 
-        if ($password !== $confirmPassword) {
-            echo "<script>
-                swal({
-                    title: 'Passwords do not match',
-                    text: 'Please make sure both passwords match.',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
+    $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-        $sql_check_email = "SELECT * FROM usuarios WHERE email = '$email'";
-        $result_check_email = $conn->query($sql_check_email);
-        if ($result_check_email->num_rows > 0) {
-            echo "<script>
-                swal({
-                    title: 'Email already registered',
-                    text: 'This email is already associated with an account.',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
-
-        $sql_check_username = "SELECT * FROM usuarios WHERE username = '$username'";
-        $result_check_username = $conn->query($sql_check_username);
-        if ($result_check_username->num_rows > 0) {
-            echo "<script>
-                swal({
-                    title: 'Username already in use',
-                    text: 'This username is already in use.',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
-
-        $sql_check_dui = "SELECT * FROM usuarios WHERE dui = '$dui'";
-        $result_check_dui = $conn->query($sql_check_dui);
-        if ($result_check_dui->num_rows > 0) {
-            echo "<script>
-                swal({
-                    title: 'DUI already registered',
-                    text: 'This DUI is already associated with an account.',
-                    icon: 'error',
-                    button: 'Close'
-                });
-            </script>";
-            exit;
-        }
-
-        $encrypted_pass = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO usuarios (name, lastname, username, password, address, dui, email, user_type) VALUES ('$name','$lastname','$username', '$encrypted_pass', '$address', $dui, '$email', 0)";
-        if ($conn->query($sql) === TRUE) {
-
-            echo "<script>
-                swal({
-                    title: 'Successful Registration',
-                    text: 'User registered successfully',
-                    icon: 'success',
-                    button: 'Close'
-                });
-            </script>";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+    if (empty($name) || empty($lastname) || empty($username) || empty($password) || empty($address) || empty($dui) || empty($email)) {
+        echo "<script>swal({
+        title: 'Invalid Name or Lastname',
+        text: 'Please enter a valid name and lastname (only letters allowed).',
+        icon: 'error',
+        button: 'Close',
+        });</script>";
+        exit;
     }
-    ?>
+
+    if (!preg_match("/^[a-zA-Z ]*$/", $_POST["name"]) || !preg_match("/^[a-zA-Z ]*$/", $_POST["lastname"])) {
+        echo "<script>
+            swal({
+                title: 'Invalid Name or Lastname',
+                text: 'Please enter a valid name and lastname (only letters allowed).',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    if (!preg_match("/^[0-9-]*$/", $_POST["dui"])) {
+        echo "<script>
+            swal({
+                title: 'Invalid DUI',
+                text: 'Please enter a valid DUI (only numbers and hyphen allowed).',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    if ($_POST["password"] !== $_POST["confirmPassword"]) {
+        echo "<script>
+            swal({
+                title: 'Passwords do not match',
+                text: 'Please make sure both passwords match.',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    $stmt->execute();
+
+    $pgsql_check_email = "SELECT * FROM usuarios WHERE email = :email";
+    $stmt_check_email = $conn->prepare($pgsql_check_email);
+    $stmt_check_email->bindParam(':email', $_POST["email"], PDO::PARAM_STR);
+    $stmt_check_email->execute();
+    $email_count = $stmt_check_email->rowCount();
+
+    if ($email_count > 0) {
+        echo "<script>
+            swal({
+                title: 'Email already registered',
+                text: 'This email is already associated with an account.',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    $pgsql_check_email = "SELECT * FROM usuarios WHERE username = :username";
+    $stmt_check_username = $conn->prepare($pgsql_check_email);
+    $stmt_check_username->bindParam(':username', $_POST["username"], PDO::PARAM_STR);
+    $stmt_check_username->execute();
+    $username_count = $stmt_check_username->rowCount();
+
+    if ($username_count > 0) {
+        echo "<script>
+            swal({
+                title: 'Username already in use',
+                text: 'This username is already in use.',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    $pgsql_check_dui = "SELECT * FROM usuarios WHERE dui = :dui";
+    $stmt_check_dui = $conn->prepare($pgsql_check_dui);
+    $stmt_check_dui->bindParam(':dui', $_POST["dui"], PDO::PARAM_STR);
+    $stmt_check_dui->execute();
+    $dui_count = $stmt_check_dui->rowCount();
+
+    if ($dui_count > 0) {
+        echo "<script>
+            swal({
+                title: 'DUI already registered',
+                text: 'This DUI is already associated with an account.',
+                icon: 'error',
+                button: 'Close'
+            });
+        </script>";
+        exit;
+    }
+
+    echo "<script>
+            swal({
+                title: 'Successful Registration',
+                text: 'User registered successfully',
+                icon: 'success',
+                button: 'Close'
+            });
+        </script>";
+
+}
+
+?>
+
 
     <div>
         <div class="splash active">
