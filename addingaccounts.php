@@ -55,7 +55,7 @@ require 'addingaccounts_lang.php';
             <?php 
 $pgsql = include_once "conexion.php";
 $resultado = $pgsql->query("SELECT username FROM usuarios");
-$nom_usuario = $resultado->fetch_column(0);?>
+$nom_usuario = $resultado->fetch(PDO::FETCH_ASSOC)?>
 				<div class="sidebar-user">
 					<img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
 					<div class="fw-bold"><?php echo"$nom_usuario";?></div>
@@ -213,7 +213,7 @@ $nom_usuario = $resultado->fetch_column(0);?>
 
 								<?php                                    
 $resultado = $pgsql->query("SELECT id_user, name, lastname, username, password, address, dui, card_number, email FROM usuarios");
-$i = $resultado->fetch_assoc(0);
+$i = $resultado->fetch(PDO::FETCH_ASSOC);
                                     ?>
 									<thead>
 										<tr>

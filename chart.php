@@ -1,9 +1,9 @@
 <?php
 
  
-$mysqli = include_once "conexion.php";
-$result = $mysqli->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
-$datalist = $result->fetch_all(MYSQLI_ASSOC);
+$pgsql = include_once "conexion.php";
+$result = $pgsql->query("select transaction_date AS 'date',COUNT(transaction_date) AS 'count' FROM transactions GROUP BY transaction_date ORDER BY transaction_date ASC LIMIT 15");
+$datalist = $result->fetch(PDO::FETCH_ASSOC);
 $test = array();
 
 $dataPoints = array();
