@@ -1,8 +1,7 @@
 <?php
-
 $servername = "Localhost";
-$dbname = "Banko";
-$username = "Banko_user";
+$dbname = "banko";
+$username = "banko_user";
 $password = "Info2024/*-";
 
 try {
