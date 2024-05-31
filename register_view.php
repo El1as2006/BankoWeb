@@ -93,15 +93,19 @@ $conn = include_once("conexion.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $name = mysqli_real_escape_string($conn,$_POST["name"]);
-    $lastname = mysqli_real_escape_string($conn, $_POST["lastname"]);
-    $username =  mysqli_real_escape_string($conn, $_POST["username"]);
-    $password = mysqli_real_escape_string($conn, $_POST["password"]);
-    $confirmPassword = mysqli_real_escape_string($conn, $_POST["confirmPassword"]);
-    $address = mysqli_real_escape_string($conn, $_POST["address"]);
-    $dui = mysqli_real_escape_string($conn, $_POST["dui"]);
-    $email = mysqli_real_escape_string($conn, $_POST["email"]);
+    $stmt = $conn->prepare("INSERT INTO usuarios (name, lastname, username, password, address, dui, email, user_type) VALUES (:name, :lastname, :username, :password, :address, :dui, :email, :user_type)");
 
+    $stmt->bindParam(':name', $_POST["name"], PDO::PARAM_STR);
+    $stmt->bindParam(':lastname', $_POST["lastname"], PDO::PARAM_STR);
+    $stmt->bindParam(':username', $_POST["username"], PDO::PARAM_STR);
+    $stmt->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+    $stmt->bindParam(':address', $_POST["address"], PDO::PARAM_STR);
+    $stmt->bindParam(':dui', $_POST["dui"], PDO::PARAM_STR);
+    $stmt->bindParam(':email', $_POST["email"], PDO::PARAM_STR);
+    $stmt->bindParam(':user_type', $_POST["user_type"], PDO::PARAM_STR);
+
+    $hashed_password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+    
 
     if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $lastname)) {
         echo "<p><script>Swal.fire({
@@ -134,11 +138,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });</script></p>";
         exit; 
     }
+    
+    $pgsql_check_username = "SELECT * FROM usuarios WHERE email = :email";
+    $stmt_check_username = $conn->prepare($pgsql_check_username);
+    $stmt_check_username->bindParam(':email', $_POST["email"], PDO::PARAM_STR);
+    $stmt_check_username->execute();
+    $username_count = $stmt_check_email->rowCount();
 
-
-    $sql_check_email = "SELECT * FROM usuarios WHERE email = '$email'";
-    $result_check_email = $conn->query($sql_check_email);
-    if ($result_check_email->num_rows > 0) {
+    if ($username_count > 0) {
         echo "<p><script>Swal.fire({
             title: 'Email already registered',
             text: 'This email is already associated with an account.',
@@ -148,10 +155,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit; // Stop script execution if email is duplicated
     }
 
+    $pgsql_check_username = "SELECT * FROM usuarios WHERE username = :username";
+    $stmt_check_username = $conn->prepare($pgsql_check_username);
+    $stmt_check_username->bindParam(':username', $_POST["username"], PDO::PARAM_STR);
+    $stmt_check_username->execute();
+    $username_count = $stmt_check_email->rowCount();
 
-    $sql_check_username = "SELECT * FROM usuarios WHERE username = '$username'";
-    $result_check_username = $conn->query($sql_check_username);
-    if ($result_check_username->num_rows > 0) {
+    if ($email_count > 0) {
         echo "<p><script>Swal.fire({
             title: 'Username already in use',
             text: 'This username is already in use.',
@@ -161,10 +171,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit; 
     }
 
-    
-    $sql_check_dui = "SELECT * FROM usuarios WHERE dui = '$dui'";
-    $result_check_dui = $conn->query($sql_check_dui);
-    if ($result_check_dui->num_rows > 0) {
+    $pgsql_check_dui = "SELECT * FROM usuarios WHERE dui = :dui";
+    $stmt_check_dui = $conn->prepare($pgsql_check_dui);
+    $stmt_check_dui->bindParam(':dui', $_POST["dui"], PDO::PARAM_STR);
+    $stmt_check_dui->execute();
+    $dui_count = $stmt_check_dui->rowCount();
+
+    if ($dui_count > 0) {
         echo "<p><script>Swal.fire({
             title: 'DUI already registered',
             text: 'This DUI is already associated with an account.',
