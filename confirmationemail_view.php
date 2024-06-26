@@ -6,8 +6,8 @@ $conn = include("conexion.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare("SELECT token FROM usuarios WHERE id_user = ?");
-    $stmt->bind_param("i", $id_usuario); // Reemplaza $id_usuario con el identificador del usuario actual
-    $id_usuario = 1; // Suponiendo que el ID del usuario actual es 1 (debes obtenerlo según tu aplicación)
+    $stmt->bind_param("i", $id_usuario); 
+    $id_usuario = 1; 
     $stmt->execute();
     $stmt->bind_result($token_correcto);
     $stmt->fetch();
@@ -54,8 +54,8 @@ $conn->close();
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/login.css">
-  <link rel="stylesheet" href="package/dist/Sweetalert2.css">
-  <script src="package/dist/Sweetalert2.min.js"></script>
+  <link rel="stylesheet" href="package/dist/sweetalert2.css">
+  <script src="package/dist/sweetalert2.min.js"></script>
   
 </head>
 <body>

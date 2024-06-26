@@ -1,10 +1,15 @@
 <?php
-$host = "localhost";
-$usuario = "root";
-$contrasenia = "";
-$base_de_datos = "banko";
-$mysqli = new mysqli($host, $usuario, $contrasenia, $base_de_datos);
-if ($mysqli->connect_errno) {
-echo "Falló la conexión a MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+
+$servername = "Localhost";
+$dbname = "bankodb";
+$username = "flores";
+$password = "123";
+
+try {
+  $conn = new PDO("pgsql:host=$servername;dbname=$dbname", $username, $password);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  // echo "Connected successfully";
+  return $conn;
+} catch (PDOException $e) {
+  echo "Connection failed: " . $e->getMessage();
 }
-return $mysqli;
