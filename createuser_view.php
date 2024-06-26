@@ -83,7 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Check if email, username, or DUI already exist in the database
+    if (!checkdnsrr($email, "MX")){
+        echo "<script>swal({ title: 'Email doesnt exist', text: 'This email does not exist.', icon: 'error', button: 'Close' });</script>";
+    }
+
     $sql = "SELECT * FROM users WHERE email = :email OR username = :username OR dui = :dui";
     $stmt = $conn->prepare($sql);
     $stmt->execute([':email' => $email, ':username' => $username, ':dui' => $dui]);
@@ -103,6 +106,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed = password_hash($password, PASSWORD_DEFAULT);
     $hashed_password = '$2a$' . substr($hashed, 4);
 
+    $hash_dui = password_hash($dui, PASSWORD_DEFAULT);
+    $hashed_dui = '$2a$' . substr($hash_dui, 4);
+
     $fullName = $name . " " . $lastname;
 
 
@@ -113,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':username' => $username,
         ':password' => $hashed_password,
         ':address' => $address,
-        ':dui' => $dui,
+        ':dui' => $hashed_dui,
         ':email' => $email,
         ':rol' => $user_type,
         ':state' => $stat

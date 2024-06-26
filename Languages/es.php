@@ -78,5 +78,7 @@ $lang = [
     "Listing Cards Payment"=>"Listado Tarjetas Pagos",
     "Card Number"=>"Numero de Tarjeta",
     "Days left"=>"Días Faltantes",
+    "Checking Account"=> "Cuenta Corriente"
 ];
+
 

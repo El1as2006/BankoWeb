@@ -78,4 +78,5 @@ $lang = [
     "Listing Cards Payment"=>"Listing Cards Payment",
     "Card Number"=>"Card Number",
     "Days left"=>"Days left",
+    "Checking Account"=> "Checking Account"
 ];

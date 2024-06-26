@@ -22,7 +22,7 @@ VALUES( :owner_id, :balance, :accounttype, :accountnumber);");
 $params = [
     ':owner_id' => $user_id,
     ':balance' => 0,
-    ':accounttype' => 'savings',   
+    ':accounttype' => 'checking',   
     ':accountnumber' => $hashed_account, 
 ];
 
