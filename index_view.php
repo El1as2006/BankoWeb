@@ -349,7 +349,7 @@ SUBSTRING(dates.date_part FROM 7 FOR 4) asc,  -- Year part
                                                 <div class="row">
                                                     <div class="col mt-0">
                                                         <?php
-                                                        $stmt = $conn->prepare("SELECT SUM(balance) AS total_dinero FROM accounts;");
+                                                        $stmt = $conn->prepare("SELECT sum(cast(balance AS double precision)) AS total_dinero FROM accounts;");
                                                         $stmt->execute();
                                                         $total_cash = $stmt->fetch(PDO::FETCH_COLUMN);
                                                         ?>

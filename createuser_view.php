@@ -106,9 +106,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed = password_hash($password, PASSWORD_DEFAULT);
     $hashed_password = '$2a$' . substr($hashed, 4);
 
-    $hash_dui = password_hash($dui, PASSWORD_DEFAULT);
-    $hashed_dui = '$2a$' . substr($hash_dui, 4);
+//-------------------------------------------------------------------
+$ciphering = "BF-CBC";
 
+$iv_length = openssl_cipher_iv_length($ciphering);
+$options = 0;
+
+$encryption_iv = random_bytes($iv_length);
+
+$encryption_key = openssl_digest(php_uname(), 'MD5', TRUE);
+
+$encrypted_dui = openssl_encrypt($dui, $ciphering,
+	$encryption_key, $options, $encryption_iv);
+
+//-------------------------------------------------------------------
+
+$ciphering = "BF-CBC";
+
+$iv_length = openssl_cipher_iv_length($ciphering);
+$options = 0;
+
+$encryption_iv = random_bytes($iv_length);
+
+$encryption_key = openssl_digest(php_uname(), 'MD5', TRUE);
+
+$encrypted_address = openssl_encrypt($address, $ciphering,
+	$encryption_key, $options, $encryption_iv);
+
+//-------------------------------------------------------------------
     $fullName = $name . " " . $lastname;
 
 
@@ -118,8 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':name' => $fullName,
         ':username' => $username,
         ':password' => $hashed_password,
-        ':address' => $address,
-        ':dui' => $hashed_dui,
+        ':address' => $hashed_address,
+        ':dui' => $encrypted_dui,
         ':email' => $email,
         ':rol' => $user_type,
         ':state' => $stat
