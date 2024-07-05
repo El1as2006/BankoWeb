@@ -56,7 +56,7 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="img/brands/LogoBanko1.png" width="130px" />
+				<img src="assets/images/banko logos-10.png" width="150px" />
 			</a>
 			<div class="sidebar-content">
 

@@ -83,9 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    if (!checkdnsrr($email, "MX")){
-        echo "<script>swal({ title: 'Email doesnt exist', text: 'This email does not exist.', icon: 'error', button: 'Close' });</script>";
-    }
+    // if (!checkdnsrr($email, "MX")){
+    //     echo "<script>swal({ title: 'Email doesnt exist', text: 'This email does not exist.', icon: 'error', button: 'Close' });</script>";
+    // }
 
     $sql = "SELECT * FROM users WHERE email = :email OR username = :username OR dui = :dui";
     $stmt = $conn->prepare($sql);
@@ -102,6 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         exit;
     }
+
 
     $hashed = password_hash($password, PASSWORD_DEFAULT);
     $hashed_password = '$2a$' . substr($hashed, 4);
@@ -134,6 +135,7 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
 	$encryption_key, $options, $encryption_iv);
 
 //-------------------------------------------------------------------
+
     $fullName = $name . " " . $lastname;
 
 
@@ -143,7 +145,7 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
         ':name' => $fullName,
         ':username' => $username,
         ':password' => $hashed_password,
-        ':address' => $hashed_address,
+        ':address' => $encrypted_address,
         ':dui' => $encrypted_dui,
         ':email' => $email,
         ':rol' => $user_type,
@@ -165,7 +167,7 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-                <img src="img/brands/LogoBanko1.png" width="130px" />
+            <img src="assets/images/banko logos-10.png" width="150px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">

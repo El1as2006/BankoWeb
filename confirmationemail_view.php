@@ -70,7 +70,7 @@ $conn->close();
             <div class="card-body">
             <button id="btnCerrar" href="login_view.php" style="float: right" class="button">Back</button>
               <div class="brand-wrapper">
-                <img src="assets/images/logo.svg" alt="logo" class="logo">
+                <img src="assets/images/banko logos-10.png" width="150px" />
               </div>
               <p class="login-card-description">Please enter your token</p>
               <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST"> 
