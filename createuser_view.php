@@ -167,7 +167,7 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-            <img src="assets/images/banko logos-10.png" width="150px" />
+            <img src="assets/images/banko logos-03.png" width="150px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
