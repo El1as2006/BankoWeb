@@ -24,7 +24,7 @@
                                             flex-direction: column;
                                             align-items: center;">
               <div class="brand-wrapper">
-                <img src="assets/images/banko logos-03.png" alt="logo" class="logo" >
+                <img src="assets/images/banko logos-03.png" alt="logo" class="logo">
               </div>
               <p class="login-card-description">Sign into your account</p>
               <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
@@ -36,6 +36,7 @@
                   <label for="password" class="sr-only">Password</label>
                   <div class="input-group">
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary height1" type="button" id="togglePassword">
                         <i class="mdi mdi-eye"></i>
@@ -51,54 +52,69 @@
       </div>
     </div>
   </main>
- <?php
-session_start();
+  <?php
+  session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  if (empty($_POST['username']) || empty($_POST['password'])) {
-    echo "<script>
-            Swal.fire({
-                title: 'Empty Fields',
-                text: 'Please fill in both username and password',
-                icon: 'error',
-                button: 'Close'
-            });
-          </script>";
-    exit; 
-}
+    if (empty($_POST['username']) || empty($_POST['password'])) {
+      echo "<script>
+                Swal.fire({
+                    title: 'Empty Fields',
+                    text: 'Please fill in both username and password',
+                    icon: 'error',
+                    button: 'Close'
+                });
+              </script>";
+      exit;
+    }
+
     $conn = include 'conexion.php';
 
-    // Obtener los datos del formulario
+    // Get form data
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    // Consultar el usuario por nombre de usuario
+    // Query the user by username
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
 
-    // Obtener el resultado de la consulta
+    // Get the result of the query
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
     if ($user) {
+      // Check if the user is active
+      if ($user['state'] == 0) {
+        echo "<script>
+                    Swal.fire({
+                        title: 'User Deactivated',
+                        text: 'Please contact the administrator for more information.',
+                        icon: 'error',
+                        button: 'Close'
+                    }).then(function() {
+                        window.location = 'login_view.php';
+                    });
+                  </script>";
+        exit;
+      }
 
-        if (password_verify($password, $user['pass'])) {
+      // Verify password
+      if (password_verify($password, $user['pass'])) {
+        $_SESSION['username'] = $user['username'];
+        $_SESSION["logged_in"] = true;
 
-            $_SESSION['username'] = $user['username'];
-
-            switch ($user['rol']) {
-                case 1: // Admin
-                    $_SESSION['rol'] = 'Admin';
-                    header('Location: index_view.php');
-                    exit();
-                case 2: 
-                    $_SESSION['rol'] = 'Cashier';
-                    header('Location: index_view_cashier.php');
-                    exit();
-                case 3: 
-                    echo "<script>
+        switch ($user['rol']) {
+          case 1: // Admin
+            $_SESSION['rol'] = 'Admin';
+            header('Location: index_view.php');
+            exit();
+          case 2: // Cashier
+            $_SESSION['rol'] = 'Cashier';
+            header('Location: index_view_cashier.php');
+            exit();
+          case 3: // Restricted
+            echo "<script>
                             Swal.fire({
                                 title: 'Access Denied',
                                 text: 'You do not have permission to access this page',
@@ -108,9 +124,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 window.location = 'login_view.php';
                             });
                           </script>";
-                    break;
-                default:
-                    echo "<script>
+            break;
+          default:
+            echo "<script>
                             Swal.fire({
                                 title: 'Unknown Role',
                                 text: 'Please contact the administrator',
@@ -120,9 +136,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 window.location = 'login_view.php';
                             });
                           </script>";
-            }
-        } else {
-            echo "<script>
+        }
+      } else {
+        echo "<script>
                     Swal.fire({
                         title: 'Wrong Password',
                         text: 'Please check your password',
@@ -130,9 +146,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         button: 'Close'
                     });
                   </script>";
-        }
+      }
     } else {
-        echo "<script>
+      echo "<script>
                 Swal.fire({
                     title: 'User Not Found',
                     text: 'Please check your username',
@@ -142,10 +158,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </script>";
     }
 
-
     $conn = null;
-}
-?>
+  }
+  ?>
+
 
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

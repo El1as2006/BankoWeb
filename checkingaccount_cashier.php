@@ -50,7 +50,7 @@ if ($account_count >= 1) {
                 icon: 'warning',
                 confirmButtonText: 'Close'
             }).then(function() {
-                window.location = 'addingaccounts.php';
+                window.location = 'addingaccounts_cashier.php';
             });
           </script>";
 } else {
@@ -74,7 +74,7 @@ if ($account_count >= 1) {
                     icon: 'success',
                     confirmButtonText: 'Close'
                 }).then(function() {
-                    window.location = 'addingaccounts.php';
+                    window.location = 'addingaccounts_cashier.php';
                 });
               </script>";
     } else {
@@ -85,7 +85,7 @@ if ($account_count >= 1) {
                     icon: 'error',
                     confirmButtonText: 'Close'
                 }).then(function() {
-                    window.location = 'addingaccounts';
+                    window.location = 'addingaccounts_cashier';
                 });
               </script>";
     }
@@ -93,4 +93,3 @@ if ($account_count >= 1) {
 ?>
 </body>
 </html>
-

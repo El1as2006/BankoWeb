@@ -1,5 +1,6 @@
 <?php
 require 'addingaccounts_lang.php';
+require 'funcs/funcs.php';
 $conn = include_once "conexion.php";
 ?>
 <!DOCTYPE html>
@@ -56,7 +57,7 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+				<img src="assets/images/banko logos-03.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
 
@@ -82,7 +83,11 @@ $conn = include_once "conexion.php";
 							<i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create New User") ?></span>
 						</a>
 					</li>
-
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+                        </a>
+                    </li>
 					<li class="sidebar-item">
 						<a class='sidebar-link' href='addingcards.php'>
 							<i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
@@ -146,7 +151,7 @@ $conn = include_once "conexion.php";
 								<i class="align-middle fas fa-cog"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="#"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
+								<a class="dropdown-item" href="logout.php"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
 							</div>
 						</li>
 					</ul>
@@ -154,7 +159,6 @@ $conn = include_once "conexion.php";
 			</nav>
 			<main class="content">
 				<div class="container-fluid">
-
 					<div class="header">
 						<h1 class="header-title">
 							<?= lang("Adding Bank Accounts") ?>
@@ -180,11 +184,11 @@ $conn = include_once "conexion.php";
 									?>
 									<thead>
 										<tr>
-											<th style="width:25%;"><?= lang("Name") ?></th>
-											<th style="width:25%"><?= lang("Username") ?></th>
-											<th style="width:25%">DUI</th>
-											<th class="d-none d-md-table-cell" style="width:25%">Email</th>
-											<th><?= lang("Actions") ?></th>
+											<th style="width:20%;"><?= lang("Name") ?></th>
+											<th style="width:15%"><?= lang("Username") ?></th>
+											<th style="width:15%">DUI</th>
+											<th class="d-none d-md-table-cell" style="width:20%">Email</th>
+											<th style="width:15%"><?= lang("Actions") ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -198,10 +202,10 @@ $conn = include_once "conexion.php";
 													<?php echo $data["username"] ?>
 												</td>
 												<td class="d-none d-xl-table-cell">
-													<?php echo $data["dui"] ?>
+													<?php echo decryptPayload($data['dui']) ?>
 												</td>
 												<td class="d-none d-md-table-cell">
-													<?php echo $data["email"] ?>
+												<?= decryptPayload($data['email']) ?>
 												</td>
 												<td class="table-action">
 													<a href="generateaccount.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("View Acccount") ?></a>

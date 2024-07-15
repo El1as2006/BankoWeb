@@ -6,9 +6,8 @@ $conn = include_once "conexion.php";
 <html lang="en">
 
 
-<!-- Mirrored from spark.bootlab.io/pages-blank by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
-<!-- Added by HTTrack -->
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
 <head>
 	<meta charset="utf-8">
@@ -19,14 +18,6 @@ $conn = include_once "conexion.php";
 
 	<title>Adding Bank Accounts</title>
 
-	<!-- PICK ONE OF THE STYLES BELOW -->
-	<!-- <link href="css/modern.css" rel="stylesheet"> -->
-	<!-- <link href="css/classic.css" rel="stylesheet"> -->
-	<!-- <link href="css/dark.css" rel="stylesheet"> -->
-	<!-- <link href="css/light.css" rel="stylesheet"> -->
-
-	<!-- BEGIN SETTINGS -->
-	<!-- You can remove this after picking a style -->
 	<style>
 		body {
 			opacity: 0;
@@ -49,13 +40,10 @@ $conn = include_once "conexion.php";
 </head>
 
 <body>
-	<!-- <div class="splash active">
-		<div class="splash-icon"></div>
-	</div> -->
 	<div class="wrapper">
 	<nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
@@ -79,6 +67,11 @@ $conn = include_once "conexion.php";
                         <a class='sidebar-link' href='createuser_view_cashier.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -168,13 +161,13 @@ $conn = include_once "conexion.php";
 													<?php echo $data["username"] ?>
 												</td>
 												<td class="d-none d-xl-table-cell">
-													<?php echo $data["dui"] ?>
+												<?php echo substr($data['dui'] , 0, 10) ?>...
 												</td>
 												<td class="d-none d-md-table-cell">
-													<?php echo $data["email"] ?>
+												<?= substr($data['email'] , 0, 10) ?>...
 												</td>
 												<td class="table-action">
-													<a href="generateaccount.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("View Acccount") ?></a>
+													<a href="generateaccount_cashier.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("View Acccount") ?></a>
 												</td>
 											</tr>
 										<?php } ?>
@@ -213,8 +206,4 @@ $conn = include_once "conexion.php";
 	<script src="js/app.js"></script>
 
 </body>
-
-
-<!-- Mirrored from spark.bootlab.io/pages-blank by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
-
 </html>

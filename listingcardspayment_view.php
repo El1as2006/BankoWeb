@@ -2,6 +2,7 @@
 require 'addingaccounts_lang.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+require 'funcs/funcs.php';
 $conn = include_once "conexion.php";
 ?>
 <!DOCTYPE html>
@@ -52,7 +53,7 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+				<img src="assets/images/banko logos-03.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
            
@@ -74,6 +75,11 @@ $conn = include_once "conexion.php";
                         <a class='sidebar-link' href='createuser_view.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -186,10 +192,10 @@ $conn = include_once "conexion.php";
 										<tr>
 											<th style="width:10%;"><?= lang("Id") ?></th>
 											<th style="width:15%"><?= lang("Amount") ?></th>
-											<th style="width:15%"><?= lang("Sender Account") ?></th>
-											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Card Number") ?></th>
-											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Date") ?></th>
-											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Days left") ?></th>
+											<th style="width:20%"><?= lang("Sender Account") ?></th>
+											<th class="d-none d-md-table-cell" style="width:20%"><?= lang("Card Number") ?></th>
+											<th class="d-none d-md-table-cell" style="width:20%"><?= lang("Date") ?></th>
+											<th class="d-none d-md-table-cell" style="width:20%"><?= lang("Days left") ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -203,10 +209,10 @@ $conn = include_once "conexion.php";
                                                     <?php echo $data["amount"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["sender_acn"] ?>
+                                                    <?php echo decryptPayLoad($data["sender_acn"]) ?>
                                                 </td>
 												<td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["card_number"] ?>
+                                                    <?php echo decryptPayLoad($data["card_number"]) ?>
                                                 </td>
 												<td class="d-none d-xl-table-cell">
                                                     <?php echo $data["date"] ?>

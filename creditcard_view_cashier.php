@@ -7,8 +7,7 @@ ini_set('display_errors', 1);
 <!DOCTYPE html>
 <html lang="en">
 
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
-
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,60 +42,54 @@ ini_set('display_errors', 1);
 </head>
 
 <body>
-
-
-    <?php
-
+    <?php   
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = include_once("conexion.php");
 
-        $limit_card = htmlspecialchars(trim($_POST["limit"]));
+        $limit_card = htmlspecialchars(trim($_POST["limit_credit"]));
+        $id_user = $_GET["id"];
+        $conn = require("conexion.php");
+
+        $stmt = $conn->prepare("SELECT u.* FROM users u join accounts a ON a.owner_id = u.id WHERE a.id = :id");
+        $stmt->bindParam(':id', $id_user, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = null;
+
+        $username = $user_data["username"];
+        $dui = $user_data["dui"];
 
         if (empty($limit_card)) {
             echo "<script>swal({ title: 'All fields are required', text: 'Please fill in all fields.', icon: 'error', button: 'Close' });</script>";
             exit;
         }
 
-        function generateCard($limit)
-        {
-            $code = '';
-            for ($i = 0; $i < $limit; $i++) {
-                $code .= mt_rand(0, 9);
-            }
-            return $code;
+        function encrypt($plaintext, $password) {
+            $method = "AES-256-CBC";
+            $key = "7<xwv,9j%N%.!0LEsSwc.Ca3X!SdAO|/";
+            $iv = "3e021f9e2aeadb31";
+        
+            $ciphertext = openssl_encrypt($plaintext, $method, $key, OPENSSL_RAW_DATA, $iv);
+            $hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
+        
+            return $iv . $hash . $ciphertext;
         }
-        $n_account = generateCard(16);
+    
+        $encrypted_dui = utf8_encode(encrypt($dui, $password));
 
-        function generateCVV($limit)
-        {
-            $code = '';
-            for ($i = 0; $i < $limit; $i++) {
-                $code .= mt_rand(0, 9);
-            }
-            return $code;
-        }
-        $cvv = generateCVV(3);
-
-        $date = new DateTime();
-        $date->modify("+5 years");
-        $exp_date = $date->format("m/y");
-        $user_id = $_GET["id"];
-
-        $stmt = $conn->prepare("INSERT INTO public.cards_credit
-                (card_number, credit_limit, total_spent, account_id, expiration_date, cvv)
-                VALUES( :card_number, :credit_limit,:total_spent,:id, :expiration_date, :cvv);");
+        $stmt = $conn->prepare("INSERT INTO public.creditcard_requests
+                (id_user, username, dui, limit_credit)
+                VALUES( :id_user, :username,:dui,:limit_credit);");
         $params = [
-            ':card_number' => $n_account,
-            ':credit_limit' => $limit_card,
-            ':total_spent' => 0,
-            ':cvv' => $cvv,
-            ':expiration_date' => $exp_date,
-            ':id' => $user_id,
+            ':id_user' => $id_user, 
+            ':username' => $username,
+            ':dui' => $encrypted_dui, 
+            ':limit_credit' => $limit         
         ];
         if ($stmt->execute($params)) {
-            echo "<script>swal({ title: 'Successful Registration', text: 'User registered successfully', icon: 'success', button: 'Close' });</script>";
+            echo "<script>swal({ title: 'Successful Request', text: 'Credit card requested succesfully', icon: 'success', button: 'Close' });</script>";
         } else {
-            echo "<script>swal({ title: 'Registration Failed', text: 'There was an error registering the user.', icon: 'error', button: 'Close' });</script>";
+            echo "<script>swal({ title: 'Request Failed', text: 'There was an error registering the request.', icon: 'error', button: 'Close' });</script>";
         }
     }
     ?>
@@ -105,12 +98,12 @@ ini_set('display_errors', 1);
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-                <img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
 
-                    <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="" />
+                    <img src="img/avatars/profile-use.png" class="img-fluid rounded-circle mb-2" alt="" />
                     <div class="fw-bold">
                         <!-- <?php echo ($_SESSION['username']); ?> -->
                     </div>
@@ -130,6 +123,11 @@ ini_set('display_errors', 1);
                         <a class='sidebar-link' href='createuser_view_cashier.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -209,7 +207,7 @@ ini_set('display_errors', 1);
                                         <tr>
                                             <th style="width:10%;"><?= lang("Name") ?></th>
                                             <th style="width:15%"><?= lang("Username") ?></th>
-                                            <th style="width:15%">Dui</th>
+                                            <th style="width:15%">DUI</th>
                                             <th class="d-none d-md-table-cell" style="width:25%">Email</th>
                                             <th class="d-none d-md-table-cell" style="width:15%"><?= lang("Number Accounts") ?></th>
                                         </tr>
@@ -252,7 +250,7 @@ ini_set('display_errors', 1);
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label for="number"><?= lang("Create Credit Limit") ?></label>
-                                                <input type="number" class="form-control" id="limit" name="limit" placeholder=<?= lang("Create Credit Limit") ?>>
+                                                <input type="number" class="form-control" id="limit_credit" name="limit_credit" placeholder=<?= lang("Create Credit Limit") ?>>
                                             </div>
                                         </div>
                                         <div class="mb-3">

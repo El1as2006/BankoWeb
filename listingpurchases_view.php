@@ -1,5 +1,6 @@
 <?php
 require 'addingaccounts_lang.php';
+require 'funcs/funcs.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $conn = include_once "conexion.php";
@@ -52,7 +53,7 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+				<img src="assets/images/banko logos-03.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
            
@@ -74,6 +75,11 @@ $conn = include_once "conexion.php";
                         <a class='sidebar-link' href='createuser_view.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -200,10 +206,10 @@ $conn = include_once "conexion.php";
                                                     <?php echo $data["id"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["customer_acn"] ?>
+                                                    <?php echo decryptPayload( $data["customer_acn"]) ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["establishment_acn"] ?>
+                                                    <?php echo decryptPayload($data["establishment_acn"] )?>
                                                 </td>
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["amount"] ?>

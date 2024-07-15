@@ -3,6 +3,7 @@ require 'addingaccounts_lang.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $conn = include_once "conexion.php";
+require 'funcs/funcs.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +53,7 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+				<img src="assets/images/banko logos-03.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
            
@@ -74,6 +75,11 @@ $conn = include_once "conexion.php";
                         <a class='sidebar-link' href='createuser_view.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -184,14 +190,14 @@ $conn = include_once "conexion.php";
                                     ?>
 									<thead>
 										<tr>
-											<th style="width:10%;"><?= lang("Id Transference") ?></th>
+											<th style="width:5%;"><?= lang("Id Transference") ?></th>
 											<th style="width:15%"><?= lang("Sender Email") ?></th>
 											<th style="width:15%"><?= lang("Sender Account") ?></th>
 											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Reciever Email") ?></th>
 											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Reciever Account") ?></th>
 											<th class="d-none d-md-table-cell" style="width:10%"><?= lang("Amount") ?></th>
-											<th style="width:20%"><?= lang("User") ?></th>
-											<th><?= lang("Date") ?></th>
+											<th style="width:10%"><?= lang("User") ?></th>
+											<th style="width:15%"> <?= lang("Date") ?></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -202,16 +208,16 @@ $conn = include_once "conexion.php";
                                                     <?php echo $data["id_transfer"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["sender_email"] ?>
+                                                    <?php echo decryptPayload($data["sender_email"]) ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["sender_acn"] ?>
+                                                    <?php echo decryptPayload($data["sender_acn"]) ?>
                                                 </td>
 												<td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["receiver_email"] ?>
+                                                    <?php echo decryptPayload($data["receiver_email"]) ?>
                                                 </td>
 												<td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["receiver_acn"] ?>
+                                                    <?php echo decryptPayload($data["receiver_acn"]) ?>
                                                 </td>
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["amount"] ?>

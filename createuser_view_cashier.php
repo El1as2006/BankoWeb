@@ -18,7 +18,7 @@ ini_set('display_errors', 1);
   <script src="package/dist/sweetalert2.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <title>Create User</title>
+    <title>Request User</title>
 
     <style>
         body {
@@ -61,33 +61,30 @@ ini_set('display_errors', 1);
         $dui = htmlspecialchars(trim($_POST["dui"]));
         $email = htmlspecialchars(trim($_POST["email"]));
         $user_type = (int)$_POST["user_type"];
-        $status = ""; 
+        $status = "waiting"; 
 
-        // Validación básica de campos vacíos
         if (empty($name) || empty($lastname) || empty($username) || empty($password) || empty($address) || empty($dui) || empty($email)) {
             echo "<script>Swal.fire({ title: 'Error', text: 'All fields are required.', icon: 'error', button: 'Close' });</script>";
             exit;
         }
 
-        // Validación de nombre y apellido solo con letras
+
         if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $lastname)) {
             echo "<script>Swal.fire({ title: 'Error', text: 'Please enter a valid name and lastname (only letters allowed).', icon: 'error', button: 'Close' });</script>";
             exit;
         }
 
-        // Validación de formato de DUI (números y guión)
+
         if (!preg_match("/^[0-9-]*$/", $dui)) {
             echo "<script>Swal.fire({ title: 'Error', text: 'Please enter a valid DUI (only numbers and hyphen allowed).', icon: 'error', button: 'Close' });</script>";
             exit;
         }
 
-        // Validación de coincidencia de contraseñas
         if ($password !== $confirmPassword) {
             echo "<script>Swal.fire({ title: 'Error', text: 'Passwords do not match.', icon: 'error', button: 'Close' });</script>";
             exit;
         }
 
-        // Verificar si el email, username o DUI ya existen en la base de datos
         $sql = "SELECT * FROM users WHERE email = :email OR username = :username OR dui = :dui";
         $stmt = $conn->prepare($sql);
         $stmt->execute([':email' => $email, ':username' => $username, ':dui' => $dui]);
@@ -108,6 +105,15 @@ ini_set('display_errors', 1);
         $hashed = password_hash($password, PASSWORD_DEFAULT);
         $hashed_password = '$2a$' . substr($hashed, 4);
 
+        //-------------------------------------------------------------------
+        require 'funcs/funcs.php';
+
+$encrypted_dui = encryptPayload ($dui);
+$encrypted_address = encryptPayload ($address);
+$encrypted_email = encryptPayload ($email);
+
+//-------------------------------------------------------------------
+
         $sql = "INSERT INTO user_requests (name, lastname, username, password, address, dui, email, user_type, status) VALUES (:name, :lastname, :username, :password, :address, :dui, :email, :user_type, :status)";
         $stmt = $conn->prepare($sql);
         $params = [
@@ -115,9 +121,9 @@ ini_set('display_errors', 1);
             ':lastname' => $lastname,
             ':username' => $username,
             ':password' => $hashed_password,
-            ':address' => $address,
-            ':dui' => $dui,
-            ':email' => $email,
+            ':address' => $encrypted_address,
+            ':dui' => $encrypted_dui,
+            ':email' => $encrypted_email,
             ':user_type' => $user_type,
             ':status' => $status
         ];
@@ -131,15 +137,11 @@ ini_set('display_errors', 1);
     }
    
     ?>
-    <!-- <div>
-        <div class="splash active">
-            <div class="splash-icon"></div>
-        </div> -->
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-                <img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
@@ -159,6 +161,11 @@ ini_set('display_errors', 1);
 							<i class="align-middle me-2" data-feather="home"></i> <span class="align-middle"><?= lang("Principal Index") ?></span>
 						</a>
 					</li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+                        </a>
+                    </li>
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='addingaccounts_cashier.php'>
                             <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle"><?= lang("Add Bank Account") ?></span>
@@ -257,13 +264,9 @@ ini_set('display_errors', 1);
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" id="email" name="email" placeholder="email@gmail.com">
                                         </div>
-                                        <!-- <div class="mb-3">
-                                            <label for="card_number"><?= lang("Card Number") ?></label>
-                                            <input type="text" class="form-control" id="card_number" placeholder="0000-0000-0000-0000">
-                                        </div> -->
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
-                                                <label for="dui">Dui</label>
+                                                <label for="dui">DUI</label>
                                                 <input type="text" class="form-control" id="dui" name="dui" placeholder="00000000-0">
                                             </div>
                                             <div class="mb-3 col-md-4">
@@ -317,10 +320,10 @@ ini_set('display_errors', 1);
             const cardNumberInput = document.getElementById('card_number');
 
             cardNumberInput.addEventListener('input', function(e) {
-                // Eliminar caracteres no permitidos
+                // Sirve para eliminar caracteres no permitidos
                 const currentValue = e.target.value.replace(/\D/g, '');
 
-                // Aplicar máscara al número de tarjeta
+                // este aplica mascara al numero de tarjeta
                 let maskedValue = '';
                 for (let i = 0; i < currentValue.length; i++) {
                     if (i > 0 && i % 4 === 0) {
@@ -329,10 +332,10 @@ ini_set('display_errors', 1);
                     maskedValue += currentValue[i];
                 }
 
-                // Limitar el número de tarjeta a 16 caracteres
+                // esta linea limita numero de tarjeta a 16 caracteres
                 maskedValue = maskedValue.slice(0, 19);
 
-                // Actualizar el valor del campo de entrada
+                // Actualiza el valor del campo de entrada
                 e.target.value = maskedValue;
             });
         });
@@ -342,10 +345,10 @@ ini_set('display_errors', 1);
             const duiInput = document.getElementById('dui');
 
             duiInput.addEventListener('input', function(e) {
-                // Eliminar caracteres no permitidos
+                // Esta linea elimina caracteres no permitidos
                 const currentValue = e.target.value.replace(/\D/g, '');
 
-                // Aplicar máscara al DUI
+                // Aplica mascara al dui del usuario
                 let maskedValue = '';
                 for (let i = 0; i < currentValue.length; i++) {
                     if (i === 8) {
@@ -354,10 +357,10 @@ ini_set('display_errors', 1);
                     maskedValue += currentValue[i];
                 }
 
-                // Limitar el DUI a 10 caracteres
+                // limita el dui a 10 caracteres
                 maskedValue = maskedValue.slice(0, 10);
 
-                // Actualizar el valor del campo de entrada
+                // actualiza el valor del campo de entrada
                 e.target.value = maskedValue;
             });
         });
@@ -368,8 +371,4 @@ ini_set('display_errors', 1);
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 </body>
-
-
-<!-- Mirrored from spark.bootlab.io/forms-layouts by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:29 GMT -->
-
 </html>

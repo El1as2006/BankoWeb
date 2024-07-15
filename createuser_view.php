@@ -64,25 +64,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dui = str_replace('-', '', $dui);
 
     if (empty($name) || empty($lastname) || empty($username) || empty($password) || empty($address) || empty($dui) || empty($email)) {
-        echo "<script>swal({ title: 'All fields are required', text: 'Please fill in all fields.', icon: 'error', button: 'Close' });</script>";
+        echo "<script>
+                Swal.fire({ 
+                    title: 'All fields are required', 
+                    text: 'Please fill in all fields.', 
+                    icon: 'error', 
+                    button: 'Close' 
+                }).then(function() {
+                    window.location = 'createuser_view.php';
+                });
+              </script>";
         exit;
     }
-
+    
     if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $lastname)) {
-        echo "<script>swal({ title: 'Invalid Name or Lastname', text: 'Please enter a valid name and lastname (only letters allowed).', icon: 'error', button: 'Close' });</script>";
+        echo "<script>
+                Swal.fire({ 
+                    title: 'Invalid Name or Lastname', 
+                    text: 'Please enter a valid name and lastname (only letters allowed).', 
+                    icon: 'error', 
+                    button: 'Close' 
+                }).then(function() {
+                    window.location = 'createuser_view.php';
+                });
+              </script>";
         exit;
     }
-
+    
     if (!preg_match("/^[0-9-]*$/", $dui)) {
-        echo "<script>swal({ title: 'Invalid DUI', text: 'Please enter a valid DUI (only numbers and hyphen allowed).', icon: 'error', button: 'Close' });</script>";
+        echo "<script>
+                Swal.fire({ 
+                    title: 'Invalid DUI', 
+                    text: 'Please enter a valid DUI (only numbers and hyphen allowed).', 
+                    icon: 'error', 
+                    button: 'Close' 
+                }).then(function() {
+                    window.location = 'createuser_view.php';
+                });
+              </script>";
         exit;
     }
-
+    
     if ($password !== $confirmPassword) {
-        echo "<script>swal({ title: 'Passwords do not match', text: 'Please make sure both passwords match.', icon: 'error', button: 'Close' });</script>";
+        echo "<script>
+                Swal.fire({ 
+                    title: 'Passwords do not match', 
+                    text: 'Please make sure both passwords match.', 
+                    icon: 'error', 
+                    button: 'Close' 
+                }).then(function() {
+                    window.location = 'createuser_view.php';
+                });
+              </script>";
         exit;
     }
-
+    
     // if (!checkdnsrr($email, "MX")){
     //     echo "<script>swal({ title: 'Email doesnt exist', text: 'This email does not exist.', icon: 'error', button: 'Close' });</script>";
     // }
@@ -94,46 +130,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($existing_user) {
         if ($existing_user['email'] === $email) {
-            echo "<script>swal({ title: 'Email already registered', text: 'This email is already associated with an account.', icon: 'error', button: 'Close' });</script>";
+            echo "<script>
+                    Swal.fire({ 
+                        title: 'Email already registered', 
+                        text: 'This email is already associated with an account.', 
+                        icon: 'error', 
+                        button: 'Close' 
+                    }).then(function() {
+                        window.location = 'createuser_view.php';
+                    });
+                  </script>";
         } elseif ($existing_user['username'] === $username) {
-            echo "<script>swal({ title: 'Username already in use', text: 'This username is already in use.', icon: 'error', button: 'Close' });</script>";
+            echo "<script>
+            Swal.fire({ 
+                ({ 
+                        title: 'Username already in use', 
+                        text: 'This username is already in use.', 
+                        icon: 'error', 
+                        button: 'Close' 
+                    }).then(function() {
+                        window.location = 'createuser_view.php';
+                    });
+                  </script>";
         } elseif ($existing_user['dui'] === $dui) {
-            echo "<script>swal({ title: 'DUI already registered', text: 'This DUI is already associated with an account.', icon: 'error', button: 'Close' });</script>";
+            echo "<script>
+            Swal.fire({ 
+                ({ 
+                        title: 'DUI already registered', 
+                        text: 'This DUI is already associated with an account.', 
+                        icon: 'error', 
+                        button: 'Close' 
+                    }).then(function() {
+                        window.location = 'createuser_view.php';
+                    });
+                  </script>";
         }
         exit;
     }
-
-
+    
     $hashed = password_hash($password, PASSWORD_DEFAULT);
     $hashed_password = '$2a$' . substr($hashed, 4);
 
 //-------------------------------------------------------------------
-$ciphering = "BF-CBC";
 
-$iv_length = openssl_cipher_iv_length($ciphering);
-$options = 0;
+require 'funcs/funcs.php';
 
-$encryption_iv = random_bytes($iv_length);
-
-$encryption_key = openssl_digest(php_uname(), 'MD5', TRUE);
-
-$encrypted_dui = openssl_encrypt($dui, $ciphering,
-	$encryption_key, $options, $encryption_iv);
-
-//-------------------------------------------------------------------
-
-$ciphering = "BF-CBC";
-
-$iv_length = openssl_cipher_iv_length($ciphering);
-$options = 0;
-
-$encryption_iv = random_bytes($iv_length);
-
-$encryption_key = openssl_digest(php_uname(), 'MD5', TRUE);
-
-$encrypted_address = openssl_encrypt($address, $ciphering,
-	$encryption_key, $options, $encryption_iv);
-
+$encrypted_address = encryptPayload($address);
+$encrypted_dui = encryptPayload($dui); 
+$encrypted_email = encryptPayload($email);
 //-------------------------------------------------------------------
 
     $fullName = $name . " " . $lastname;
@@ -147,27 +191,23 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
         ':password' => $hashed_password,
         ':address' => $encrypted_address,
         ':dui' => $encrypted_dui,
-        ':email' => $email,
+        ':email' => $encrypted_email,
         ':rol' => $user_type,
         ':state' => $stat
     ];
 
     if ($stmt->execute($params)) {
-        echo "<script>swal({ title: 'Successful Registration', text: 'User registered successfully', icon: 'success', button: 'Close' });</script>";
+        echo "<script>Swal.fire({ title: 'Successful Registration', text: 'User registered successfully.', icon: 'success', button: 'Close' });</script>";
     } else {
-        echo "<script>swal({ title: 'Registration Failed', text: 'There was an error registering the user.', icon: 'error', button: 'Close' });</script>";
+        echo "<script>            swal({ 
+            ({ title: 'Registration Failed', text: 'There was an error registering the user.', icon: 'error', button: 'Close' });</script>";
     }
 }
 ?>
-
-    <!-- <div>
-        <div class="splash active">
-            <div class="splash-icon"></div>
-        </div> -->
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-            <img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
@@ -185,6 +225,11 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='index_view.php'>
                             <i class="align-middle me-2" data-feather="home"></i> <span class="align-middle"><?= lang("Principal Index") ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -320,13 +365,9 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" id="email" name="email" placeholder="email@gmail.com">
                                         </div>
-                                        <!-- <div class="mb-3">
-                                            <label for="card_number"><?= lang("Card Number") ?></label>
-                                            <input type="text" class="form-control" id="card_number" placeholder="0000-0000-0000-0000">
-                                        </div> -->
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
-                                                <label for="dui">Dui</label>
+                                                <label for="dui">DUI</label>
                                                 <input type="text" class="form-control" id="dui" name="dui" placeholder="00000000-0">
                                             </div>
                                             <div class="mb-3 col-md-4">
@@ -382,10 +423,10 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
             const cardNumberInput = document.getElementById('card_number');
 
             cardNumberInput.addEventListener('input', function(e) {
-                // Eliminar caracteres no permitidos
+                // Elimina caracteres no permitidos
                 const currentValue = e.target.value.replace(/\D/g, '');
 
-                // Aplicar máscara al número de tarjeta
+                // Aplica mascara al numero de tarjeta
                 let maskedValue = '';
                 for (let i = 0; i < currentValue.length; i++) {
                     if (i > 0 && i % 4 === 0) {
@@ -394,10 +435,10 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
                     maskedValue += currentValue[i];
                 }
 
-                // Limitar el número de tarjeta a 16 caracteres
+                // limitar el numero de tarjeta a 16 caracteres
                 maskedValue = maskedValue.slice(0, 19);
 
-                // Actualizar el valor del campo de entrada
+                // actualiza el valor del campo de entrada
                 e.target.value = maskedValue;
             });
         });
@@ -407,10 +448,10 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
             const duiInput = document.getElementById('dui');
 
             duiInput.addEventListener('input', function(e) {
-                // Eliminar caracteres no permitidos
+                // elimina caracteres no permitidos
                 const currentValue = e.target.value.replace(/\D/g, '');
 
-                // Aplicar máscara al DUI
+                // aplica mascara al dui
                 let maskedValue = '';
                 for (let i = 0; i < currentValue.length; i++) {
                     if (i === 8) {
@@ -419,10 +460,10 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
                     maskedValue += currentValue[i];
                 }
 
-                // Limitar el DUI a 10 caracteres
+                // limitar el dui a 10 caracteres
                 maskedValue = maskedValue.slice(0, 10);
 
-                // Actualizar el valor del campo de entrada
+                // actualiza el valor del campo de entrada
                 e.target.value = maskedValue;
             });
         });
@@ -433,8 +474,4 @@ $encrypted_address = openssl_encrypt($address, $ciphering,
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 </body>
-
-
-<!-- Mirrored from spark.bootlab.io/forms-layouts by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:29 GMT -->
-
 </html>
