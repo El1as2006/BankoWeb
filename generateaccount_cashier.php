@@ -2,7 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require 'generateaccount_lang.php';
-require 'funcs/funcs.php';
 $mysqli = include_once "conexion.php";
 ?>
 <!DOCTYPE html>
@@ -75,84 +74,34 @@ $mysqli = include_once "conexion.php";
 					<img src="img/avatars/profile-use.png" class="img-fluid rounded-circle mb-2" alt="" />
 					<div class="fw-bold"><?php
 					echo ($_SESSION['username']); ?></div>
-					<small>Admin</small>
+					<small>Cashier</small>
 				</div>
 				<ul class="sidebar-nav">
-					<li class="sidebar-header">
-						Main
-					</li>
+                    <li class="sidebar-header">
+                        Main
+                    </li>
 					<li class="sidebar-item">
-						<a class='sidebar-link' href='index_view.php'>
-							<i class="align-middle me-2" data-feather="home"></i> <span
-								class="align-middle"><?= lang("Principal Index") ?></span>
+						<a class='sidebar-link' href='index_view_cashier.php'>
+							<i class="align-middle me-2" data-feather="home"></i> <span class="align-middle"><?= lang("Principal Index") ?></span>
 						</a>
 					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='createuser_view.php'>
-							<i class="align-middle me-2" data-feather="users"></i> <span
-								class="align-middle"><?= lang("Create New User"); ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-                        <a class='sidebar-link' href='edit_delete_view.php'>
-                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+					<li class="sidebar-item"> 
+                        <a class='sidebar-link' href='createuser_view_cashier.php'>
+                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span
+                                class="align-middle"><?= lang("Create New User"); ?></span>
                         </a>
                     </li>
 					<li class="sidebar-item">
-						<a class='sidebar-link' href='addingaccounts.php'>
-							<i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span
-								class="align-middle"><?= lang("Add Bank Account") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='addingcards.php'>
-							<i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span
-								class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='listingtransferences_view.php'>
-							<i class="align-middle me-2" data-feather="book"></i> <span
-								class="align-middle"><?= lang("Listing Transferences") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='listingpurchases_view.php'>
-							<i class="align-middle me-2" data-feather="shopping-bag"></i> <span
-								class="align-middle"><?= lang("Listing Purchases") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='listingpayments_view.php'>
-							<i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span
-								class="align-middle"><?= lang("Listing Payments") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='listingcharges_view.php'>
-							<i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span
-								class="align-middle"><?= lang("Listing Charges") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='listingcardspayment_view.php'>
-							<i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span
-								class="align-middle"><?= lang("Listing Cards Payment") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='passrecord_view.php'>
-							<i class="align-middle me-2" data-feather="eye-off"></i> <span
-								class="align-middle"><?= lang("Record of password changes") ?></span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class='sidebar-link' href='bank_applications.php'>
-							<i class="align-middle me-2 far fa-fw fa-user"></i> <span
-								class="align-middle"><?= lang("Clients Requests") ?></span>
-						</a>
-					</li>
-				</ul>
+                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='addingcards_cashier.php'>
+                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
+                        </a>
+                    </li>
+                </ul>
 			</div>
 		</nav>
 		<div class="main">
@@ -197,14 +146,17 @@ $mysqli = include_once "conexion.php";
 				</nav>
 				<main class="content">
 					<div class="container-fluid">
-					<div class="header">
-                        <h1 class="header-title">
-                            <?= lang("Generate Accounts") ?>
-                        </h1>
-                        <nav aria-label="breadcrumb">
-							
-                        </nav>
-                    </div>
+
+						<div class="header">
+							<h1 class="header-title">
+								<?= lang("Adding Bank Accounts") ?>
+							</h1>
+							<nav aria-label="breadcrumb">
+								<ol class="breadcrumb">
+
+								</ol>
+							</nav>
+						</div>
 						<div class="col-12">
 							<div class="card">
 								<div class="card-header">
@@ -226,7 +178,7 @@ $mysqli = include_once "conexion.php";
 										?>
 										<thead>
 											<tr>
-												<th style="width:10%;"><?= lang("Name") ?></th>
+												<th style="width:15%;"><?= lang("Name") ?></th>
 												<th style="width:15%"><?= lang("Username") ?></th>
 												<th style="width:15%">DUI</th>
 												<th class="d-none d-md-table-cell" style="width:20%">Email</th>
@@ -243,10 +195,10 @@ $mysqli = include_once "conexion.php";
 														<?php echo $user_data["username"] ?>
 													</td>
 													<td class="d-none d-xl-table-cell">
-														<?php echo decryptPayload($user_data['dui'])  ?>
+														<?php echo substr($user_data['dui'] , 0, 10)  ?>...
 													</td>
 													<td class="d-none d-md-table-cell">
-														<?php echo decryptPayload($user_data['email'])  ?>
+														<?php echo substr($user_data['email'] , 0, 10)  ?>...
 													</td>
 													<!-- <td class="d-none d-md-table-cell">
 												<?php echo $account_n["accountnumber"] ?>
@@ -256,18 +208,21 @@ $mysqli = include_once "conexion.php";
 									
 													</td>
 												<?php else: ?>
-												
+													<td class="table-action">
+														<a class=" btn btn-outline-primary" href="savingaccount.php?id=<?php echo $user_id ?>" ><?= Lang("Saving Account") ?></a>
+													</td>
 												<?php endif; ?> -->
 													<td class="table-action">
 														<a class=" btn btn-outline-primary"
-															href="checkingaccount_view.php?id=<?php echo $user_id ?>"><?= Lang("Checking Account") ?></a>
+															href="checkingaccount_view_cashier.php?id=<?php echo $user_id ?>"><?= Lang("Checking Account") ?></a>
 													</td>
 
 													<td class="table-action">
 														<a class=" btn btn-outline-primary"
-															href="savingaccount_view.php?id=<?php echo $user_id ?>"><?= Lang("Saving Account") ?></a>
+															href="savingaccount_view_cashier.php?id=<?php echo $user_id ?>"><?= Lang("Saving Account") ?></a>
 													</td>
 												</tr>
+
 											</tbody>
 										</form>
 									</table>

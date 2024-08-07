@@ -1,5 +1,6 @@
 <?php
-require 'addingcards_lang.php';
+require 'edit_delete_lang.php';
+require 'funcs/funcs.php';
 $conn = include_once "conexion.php";
 ?>
 <!DOCTYPE html>
@@ -17,7 +18,7 @@ $conn = include_once "conexion.php";
 	<meta name="description" content="Modern, flexible and responsive Bootstrap 5 admin &amp; dashboard template">
 	<meta name="author" content="Bootlab">
 
-	<title>Adding Credit-Debit cards</title>
+	<title>Edit-Delete Users</title>
 
 	<!-- PICK ONE OF THE STYLES BELOW -->
 	<!-- <link href="css/modern.css" rel="stylesheet"> -->
@@ -55,7 +56,7 @@ $conn = include_once "conexion.php";
 
 	<div class="wrapper">
 	<nav id="sidebar" class="sidebar">
-            <a class='sidebar-brand' href='index_view.php'>
+            <a class='sidebar-brand' href='index_view_cashier.php'>
                 <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
@@ -82,58 +83,58 @@ $conn = include_once "conexion.php";
                                 class="align-middle"><?= lang("Create New User"); ?></span>
                         </a>
                     </li>
-					<li class="sidebar-item">
-                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
                             <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
-					<li class="sidebar-item">
+                    <li class="sidebar-item">
                         <a class='sidebar-link' href='addingaccounts_cashier.php'>
                             <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle"><?= lang("Add Bank Account") ?></span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='addingcards_cashier.php'>
+                            <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </nav>
-        <div class="main">
-            <nav class="navbar navbar-expand navbar-theme">
-                <a class="sidebar-toggle d-flex me-2">
-                    <i class="hamburger align-self-center"></i>
-                </a>
-
-                <div class="d-none d-sm-inline-block"></div>
-
-
-
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown ms-lg-2">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                                <i class="align-middle fas fa-language"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="addingcards_cashier.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="addingcards_cashier.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown ms-lg-2">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
-                                <i class="align-middle fas fa-cog"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="logout.php"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-theme">
+				<a class="sidebar-toggle d-flex me-2">
+					<i class="hamburger align-self-center"></i>
+				</a>
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item dropdown ms-lg-2">
+							<a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
+								<i class="align-middle fas fa-language"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="edit_delete_view_cashier.php?lang=en"><i class="align-middle me-1 fas fa-fw fa-user"></i> English</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="edit_delete_view_cashier.php?lang=es"><i class="align-middle me-1 fas fa-fw fa-comments"></i> Español</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown ms-lg-2">
+							<a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
+								<i class="align-middle fas fa-cog"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="logout.php"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i><?= lang("Sign out") ?></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
 			<main class="content">
 				<div class="container-fluid">
-
 					<div class="header">
 						<h1 class="header-title">
-							<?= lang("Adding Cards") ?>
+							<?= lang("Edit/Delete Users") ?>
 						</h1>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
@@ -148,24 +149,24 @@ $conn = include_once "conexion.php";
 								<h6 class="card-subtitle text-muted"> </h6>
 							</div>
 							<div class="table-responsive">
-								<form method="GET">
 								<table class="table table-striped">
+
 									<?php
-									$resultado = $conn->query("SELECT u.*,count(a.*) as accounts,count(cc.*) as credit ,count(cd.*) as debit   FROM users u JOIN accounts a ON a.owner_id = u.id left join cards_credit cc on cc.account_id = a.id left join cards_debit cd on cd.account_id = a.id group by u.id order by u.id asc;");
+									$resultado = $conn->query("SELECT * FROM users");
 									$i = $resultado->fetchAll(PDO::FETCH_ASSOC);
 									?>
 									<thead>
 										<tr>
-											<th style="width:15%;"><?= lang("Name") ?></th>
+											<th style="width:20%;"><?= lang("Name") ?></th>
 											<th style="width:15%"><?= lang("Username") ?></th>
-											<th style="width:25%">DUI</th>
-											<th class="d-none d-md-table-cell" style="width:25%">Email</th>
-											<th><?= lang("Actions") ?></th>
+											<th style="width:15%">DUI</th>
+											<th class="d-none d-md-table-cell" style="width:20%">Email</th>
+											
 										</tr>
 									</thead>
 									<tbody>
 										<?php
-										foreach ($i as $data) {	?>										
+										foreach ($i as $data) { ?>
 											<tr>
 												<td class="d-none d-xl-table-cell">
 													<?php echo $data["name"] ?>
@@ -174,35 +175,21 @@ $conn = include_once "conexion.php";
 													<?php echo $data["username"] ?>
 												</td>
 												<td class="d-none d-xl-table-cell">
-												<?php echo substr($data['dui'] , 0, 10) ?>...
+													<?php echo decryptPayload($data['dui']) ?>
 												</td>
 												<td class="d-none d-md-table-cell">
-												<?= substr($data['email'] , 0, 10) ?>...
+												<?= decryptPayload($data['email']) ?>
 												</td>
-												<?php if ($data["credit"] > 0): ?>
-													<td class="hidden">
-														
-													</td>
-												<?php else: ?>
-													<td class="table-action">
-													<a href="creditcard_view_cashier.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("Credit Card") ?></a>
-													</td>
-												<?php endif; ?>
-												
-												<?php if ($data["debit"] > 0): ?>
-													<td class="hidden">
-														
-													</td>
-												<?php else: ?>
-													<td class="table-action">
-													<a href="debitcard.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("Debit Card") ?></a>
+												<td class="table-action">
+													<a href="edituser_view.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("Edit") ?></a>
 												</td>
-												<?php endif; ?>
+												<td class="table-action">
+													<a href="deactivateuser_cashier.php?id=<?php echo $data['id'];?>" class="btn btn-outline-primary"><?= Lang("Desactivate") ?></a>
+												</td>
 											</tr>
 										<?php } ?>
 									</tbody>
-									</table>					
-								</form>								
+								</table>
 							</div>
 						</div>
 					</div>

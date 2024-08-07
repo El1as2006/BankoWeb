@@ -57,12 +57,12 @@ $conn = include_once "conexion.php";
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<a class='sidebar-brand' href='index_view.php'>
-				<img src="assets/images/banko logos-03.png" width="150px" />
+				<img src="assets/images/banko logos-03.png" width="130px" />
 			</a>
 			<div class="sidebar-content">
 
 				<div class="sidebar-user">
-					<img src="img/avatars/profile-use.png" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
+					<img src="img/avatars/profile-use.png" class="img-fluid rounded-circle mb-2" alt="" />
 					<div class="fw-bold"><?php echo ($_SESSION["username"]); ?></div>
 					<small>Admin</small>
 				</div>
@@ -80,6 +80,11 @@ $conn = include_once "conexion.php";
 							<i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create New User") ?></span>
 						</a>
 					</li>
+					<li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+                        </a>
+                    </li>
 					<li class="sidebar-item">
                         <a class='sidebar-link' href='addingaccounts.php'>
                             <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle"><?= lang("Add Bank Account") ?></span>
@@ -159,7 +164,7 @@ $conn = include_once "conexion.php";
 
 					<div class="header">
 						<h1 class="header-title">
-							<?= lang("Adding Bank Accounts") ?>
+							<?= lang("Users Requests") ?>
 						</h1>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
@@ -255,17 +260,21 @@ $conn = include_once "conexion.php";
 										}
 									}
 
-									// Seleccionar todas las solicitudes de la tabla user_requests
-									$stmt_select_requests = $conn->prepare("SELECT * FROM user_requests WHERE status = '';");
+									$stmt_select_requests = $conn->prepare("SELECT * FROM user_requests WHERE status = 'waiting';");
 									$stmt_select_requests->execute();
 									$requests = $stmt_select_requests->fetchAll(PDO::FETCH_ASSOC);
+									?>
+
+									<? 
+									$address = ["address"];
+									$dui = ["dui"];									
 									?>
 
 
 									<tr>
 										<th><?= lang("Name") ?></th>
 										<th><?= lang("Username") ?></th>
-										<th>Dui</th>
+										<th>DUI</th>
 										<th>Email</th>
 										<th><?= lang("Address") ?></th>
 										<th><?= lang("Actions") ?></th>
@@ -276,10 +285,19 @@ $conn = include_once "conexion.php";
 											<tr>
 												<td><?= $request['name'] ?></td>
 												<td><?= $request['username'] ?></td>
-												<td><?= $request['dui'] ?></td>
-												<td><?= $request['email'] ?></td>
-												<td><?= $request['address'] ?></td>
-												<td>
+												<td><?php require_once "funcs/funcs.php";
+												$decrypted_address = decryptPayload($request["dui"]);
+												echo $decrypted_address; ?></td>
+												<td><?php 
+												require_once "funcs/funcs.php";
+												$decrypted_address = decryptPayload($request["email"]);
+												echo $decrypted_address;  
+												?></td>
+												<td><?php
+												require_once "funcs/funcs.php";
+												$decrypted_address = decryptPayload($request["address"]);
+												echo $decrypted_address; ?></td>
+												<td>	
 													<form method="post">
 														<input type="hidden" name="request_id" value="<?= $request['id'] ?>">
 														<input type="hidden" name="request_pass" value="<?= $request['pass'] ?>">

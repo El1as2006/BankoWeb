@@ -1,15 +1,19 @@
 <?php
 require 'index_lang.php';
-
+require 'funcs/funcs.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $conn = include_once "conexion.php";
+
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: login_view.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from spark.bootlab.io/dashboard-default by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 19 Mar 2024 03:35:27 GMT -->
-<!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
@@ -55,15 +59,11 @@ $conn = include_once "conexion.php";
 </head>
 
 <body>
-    <!-- <div>
-        <div class="splash active">
-            <div class="splash-icon"></div>
-        </div> -->
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-            <img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="150px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
@@ -81,6 +81,11 @@ $conn = include_once "conexion.php";
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='createuser_view.php'>
                             <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -364,7 +369,7 @@ SUBSTRING(dates.date_part FROM 7 FOR 4) asc,  -- Year part
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <h1 class="display-5 mt-1 mb-3"><?php echo $total_cash; ?></h1>
+                                                <h1 class="display-5 mt-1 mb-3"><?php echo number_format($total_cash); ?></h1>
                                                 <div class="mb-0">
                                                     <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i>
                                                     </span>
@@ -401,7 +406,7 @@ SUBSTRING(dates.date_part FROM 7 FOR 4) asc,  -- Year part
                                         <tr>
                                             <th><?= lang("Name") ?></th>
                                             <th class="d-none d-xl-table-cell"><?= lang("Username") ?></th>
-                                            <th class="d-none d-xl-table-cell">Dui</th>
+                                            <th class="d-none d-xl-table-cell">DUI</th>
                                             <th><?= lang("Address") ?></th>
                                             <th class="d-none d-md-table-cell">Email</th>
                                             <th class="d-none d-md-table-cell"><?= lang("Accounts") ?></th>
@@ -418,13 +423,13 @@ SUBSTRING(dates.date_part FROM 7 FOR 4) asc,  -- Year part
                                                     <?php echo $data["username"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["dui"] ?>
+                                                    <?php echo decryptPayload($data['dui']) ?>
                                                 </td>
-                                                <td><span class="badge bg-success">
-                                                        <?php echo $data["address"] ?>
-                                                    </span></td>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo decryptPayload($data['address']) ?>
+                                                </td>
                                                 <td class="d-none d-md-table-cell">
-                                                    <?php echo $data["email"] ?>
+                                                    <?php echo decryptPayload($data['email'])  ?>
                                                 </td>
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["accounts"] ?>
@@ -515,6 +520,38 @@ SUBSTRING(dates.date_part FROM 7 FOR 4) asc,  -- Year part
             });
         });
     </script>
+     <!-- <script>
+        let timeout, warningTimeout;
+
+        function resetTimer() {
+            clearTimeout(timeout);
+            clearTimeout(warningTimeout);
+
+            // Reinicia el temporizador
+            warningTimeout = setTimeout(showWarning, 5000); 
+        }
+
+        function showWarning() {
+            const confirmation = confirm("¿Quieres cerrar sesión por inactividad?");
+            if (confirmation) {
+
+                window.location.href = 'logout.php';
+            } else {
+
+                resetTimer();
+            }
+            timeout = setTimeout(logout, 5000); 
+        }
+
+        function logout() {
+            window.location.href = 'logout.php'; // Redirige a cerrar sesión
+        }
+
+        // Eventos para detectar actividad
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

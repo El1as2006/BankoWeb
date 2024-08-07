@@ -23,7 +23,7 @@ $conn = include_once "conexion.php";
     <script src="package/dist/Sweetalert2.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <title>Administrator Dashboard</title>
+    <title>Cashier Dashboard</title>
 
     <!-- PICK ONE OF THE STYLES BELOW -->
     <!-- <link href="css/modern.css" rel="stylesheet"> -->
@@ -62,8 +62,8 @@ $conn = include_once "conexion.php";
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
-            <a class='sidebar-brand' href='index_view.php'>
-                <img src="assets/images/banko logos-03.png" width="150px" />
+            <a class='sidebar-brand' href='index_view_cashier.php'>
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
@@ -78,10 +78,20 @@ $conn = include_once "conexion.php";
                     <li class="sidebar-header">
                         Main
                     </li>
+                    <li class="sidebar-item">
+						<a class='sidebar-link' href='index_view_cashier.php'>
+							<i class="align-middle me-2" data-feather="home"></i> <span class="align-middle"><?= lang("Principal Index") ?></span>
+						</a>
+					</li>
 					<li class="sidebar-item"> 
                         <a class='sidebar-link' href='createuser_view_cashier.php'>
                             <i class="align-middle me-2 far fa-fw fa-user"></i> <span
                                 class="align-middle"><?= lang("Create New User"); ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view_cashier.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -162,7 +172,7 @@ $conn = include_once "conexion.php";
                                         <tr>
                                             <th><?= lang("Name") ?></th>
                                             <th class="d-none d-xl-table-cell"><?= lang("Username") ?></th>
-                                            <th class="d-none d-xl-table-cell">Dui</th>
+                                            <th class="d-none d-xl-table-cell">DUI</th>
                                             <th><?= lang("Address") ?></th>
                                             <th class="d-none d-md-table-cell">Email</th>
                                             <th class="d-none d-md-table-cell"><?= lang("Accounts") ?></th>
@@ -179,13 +189,13 @@ $conn = include_once "conexion.php";
                                                     <?php echo $data["username"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $data["dui"] ?>
+                                                    <?php echo substr($data['dui'] , 0, 10) ?>...
                                                 </td>
-                                                <td><span class="badge bg-success">
-                                                        <?php echo $data["address"] ?>
-                                                    </span></td>
-                                                <td class="d-none d-md-table-cell">
-                                                    <?php echo $data["email"] ?>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo substr($data['address'] , 0, 10) ?>...
+                                                </td>
+                                                <td class="d-none d-xl-table-cell">
+                                                    <?php echo substr($data['email'] , 0, 10) ?>...
                                                 </td>
                                                 <td class="d-none d-md-table-cell">
                                                     <?php echo $data["accounts"] ?>

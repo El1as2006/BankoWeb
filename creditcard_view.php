@@ -50,7 +50,7 @@ ini_set('display_errors', 1);
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = include_once("conexion.php");
 
-        $limit_card = htmlspecialchars(trim($_POST["limit"]));
+        $limit_card = htmlspecialchars(trim($_POST["credit_limit"]));
 
         if (empty($limit_card)) {
             echo "<script>swal({ title: 'All fields are required', text: 'Please fill in all fields.', icon: 'error', button: 'Close' });</script>";
@@ -82,14 +82,30 @@ ini_set('display_errors', 1);
         $exp_date = $date->format("m/y");
         $user_id = $_GET["id"];
 
+        $limit_credit = str_replace(",", "", $limit_card);
+        
+
+        function encryptPayload($plainText) {
+            $key = '7<xwv,9j%N%.!0LEsSwc.Ca3X!SdAO|/';  
+            $iv = '<w,jN.0EScC3!dO/'; 
+           
+            $encrypted = openssl_encrypt($plainText, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+            $payload = base64_encode($iv . $encrypted); 
+           
+            return $payload;
+          }
+          $encrypted_card = utf8_encode(encryptPayload($n_account));
+          $encrypted_cvv = utf8_encode(encryptPayload($cvv));
+        
+
         $stmt = $conn->prepare("INSERT INTO public.cards_credit
                 (card_number, credit_limit, total_spent, account_id, expiration_date, cvv)
                 VALUES( :card_number, :credit_limit,:total_spent,:id, :expiration_date, :cvv);");
         $params = [
-            ':card_number' => $n_account,
-            ':credit_limit' => $limit_card,
+            ':card_number' => $encrypted_card,
+            ':credit_limit' => $limit_credit,
             ':total_spent' => 0,
-            ':cvv' => $cvv,
+            ':cvv' => $encrypted_cvv,
             ':expiration_date' => $exp_date,
             ':id' => $user_id,
         ];
@@ -105,12 +121,12 @@ ini_set('display_errors', 1);
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <a class='sidebar-brand' href='index_view.php'>
-                <img src="assets/images/banko logos-03.png" width="150px" />
+                <img src="assets/images/banko logos-03.png" width="130px" />
             </a>
             <div class="sidebar-content">
                 <div class="sidebar-user">
 
-                    <img src="img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="" />
+                    <img src="img/avatars/profile-use.png" class="img-fluid rounded-circle mb-2" alt="" />
                     <div class="fw-bold">
                         <!-- <?php echo ($_SESSION['username']); ?> -->
                     </div>
@@ -127,6 +143,16 @@ ini_set('display_errors', 1);
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a class='sidebar-link' href='createuser_view.php'>
+                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create User") ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class='sidebar-link' href='edit_delete_view.php'>
+                            <i class="align-middle me-2" data-feather="users"></i> <span class="align-middle"><?= lang("Edit/Delete Users"); ?></span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class='sidebar-link' href='addingaccounts.php'>
                             <i class="align-middle me-2 far fa-fw fa-dollar-sign"></i> <span class="align-middle"><?= lang("Add Bank Account") ?></span>
                         </a>
@@ -136,11 +162,7 @@ ini_set('display_errors', 1);
                             <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Add Debit/Credit Card") ?></span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class='sidebar-link' href='createuser_view.php'>
-                            <i class="align-middle me-2 far fa-fw fa-user"></i> <span class="align-middle"><?= lang("Create User") ?></span>
-                        </a>
-                    </li>
+
                     <li class="sidebar-item">
                         <a class='sidebar-link' href='listingtransferences_view.php'>
                             <i class="align-middle me-2 far fa-fw fa-credit-card"></i> <span class="align-middle"><?= lang("Listing Transferences") ?></span>
@@ -230,6 +252,11 @@ ini_set('display_errors', 1);
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <?php
+
+                                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                                        $creditLimit = str_replace(",", "", $_POST['credit_limit']);
+                                    }
+                                    
                                     $user_id = $_GET['id'];
                                     $conn = require("conexion.php");
 
@@ -241,11 +268,11 @@ ini_set('display_errors', 1);
                                     ?>
                                     <thead>
                                         <tr>
-                                            <th style="width:10%;"><?= lang("Name") ?></th>
-                                            <th style="width:15%"><?= lang("Username") ?></th>
-                                            <th style="width:15%">Dui</th>
+                                            <th style="width:25%;"><?= lang("Name") ?></th>
+                                            <th style="width:25%"><?= lang("Username") ?></th>
+                                            <th style="width:25%">DUI</th>
                                             <th class="d-none d-md-table-cell" style="width:25%">Email</th>
-                                            <th class="d-none d-md-table-cell" style="width:15%"><?= lang("Number Accounts") ?></th>
+                                            <!-- <th class="d-none d-md-table-cell" style="width:15%"><?= lang("Number Accounts") ?></th> -->
                                         </tr>
                                     </thead>
                                     <form method="POST">
@@ -258,14 +285,14 @@ ini_set('display_errors', 1);
                                                     <?php echo $user_data["username"] ?>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell">
-                                                    <?php echo $user_data["dui"] ?>
-                                                </td>
-                                                <td class="d-none d-md-table-cell">
-                                                    <?php echo $user_data["email"] ?>
-                                                </td>
-                                                <td class="d-none d-md-table-cell">
-                                                    <!-- <?php echo $user_data["n_account"] ?> -->
-                                                </td>
+													<?php echo substr($user_data['dui'] , 0, 10) ?>...
+												</td>
+												<td class="d-none d-md-table-cell">
+												<?= substr($user_data['email'] , 0, 10) ?>...
+												</td>
+                                                <!-- <td class="d-none d-md-table-cell">
+                                                     <?php echo $user_data["n_account"] ?> 
+                                                </td> -->
                                             </tr>
 
                                         </tbody>
@@ -285,8 +312,8 @@ ini_set('display_errors', 1);
                                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?id=" . $user_id; ?>" method="POST">
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
-                                                <label for="number"><?= lang("Create Credit Limit") ?></label>
-                                                <input type="number" class="form-control" id="limit" name="limit" placeholder=<?= lang("Create Credit Limit") ?>>
+                                                <label for="text"><?= lang("Create Credit Limit") ?></label>
+                                                <input type="text" class="form-control" id="credit_limit" name="credit_limit" maxlength="11" placeholder=<?= lang("Create Credit Limit") ?>>
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -334,7 +361,7 @@ ini_set('display_errors', 1);
                 // Eliminar caracteres no permitidos
                 const currentValue = e.target.value.replace(/\D/g, '');
 
-                // Aplicar máscara al número de tarjeta
+                
                 let maskedValue = '';
                 for (let i = 0; i < currentValue.length; i++) {
                     if (i > 0 && i % 4 === 0) {
@@ -352,28 +379,25 @@ ini_set('display_errors', 1);
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const duiInput = document.getElementById('dui');
+        function formatCreditCardLimit(input) {          
 
-            duiInput.addEventListener('input', function(e) {
-                // Eliminar caracteres no permitidos
-                const currentValue = e.target.value.replace(/\D/g, '');
-
-                // Aplicar máscara al DUI
-                let maskedValue = '';
-                for (let i = 0; i < currentValue.length; i++) {
-                    if (i === 8) {
-                        maskedValue += '-';
-                    }
-                    maskedValue += currentValue[i];
-                }
-
-                // Limitar el DUI a 10 caracteres
-                maskedValue = maskedValue.slice(0, 10);
-
-                // Actualizar el valor del campo de entrada
-                e.target.value = maskedValue;
-            });
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+ 
+            input.value = value;
+        }
+    </script>
+    <script>
+        const creditLimitInput = document.getElementById('credit_limit');
+ 
+        creditLimitInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/,/g, '');
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+            e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
